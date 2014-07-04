@@ -1,56 +1,6 @@
 
 	var module = window.morph
 
-	describe("epimorph array", function () {
-		var input, input2, input3, input4
-
-		input  = {
-			array    : ["a","b","c","d","e"],
-			exclude  : [0,3],
-			by_index : true
-		}
-		input2 = {
-			array    : ["a","b","c","d","e"],
-			exclude  : ["b","d"],
-			by_index : false
-		}
-		input3 = {
-			array    : ["a","b","c","d","e"],
-			include  : [1,3],
-			by_index : true
-		}
-		input4 = {
-			array    : ["a","b","c","d","e"],
-			include  : ["a", "e"],
-		}
-
-		it("epimorphs without reference", function () {
-			var output = module.epimorph_array(input2)
-			output.push("new")
-			expect(input2.array.indexOf("new")).toEqual(-1)
-		})
-
-		it("returns empty array if its not given an include or exclude", function () {
-			expect(module.epimorph_array({ array : ["a", "b", "c"] })).toEqual([])
-		})
-
-		it("epimorphs properly with include by value", function () {
-			expect(module.epimorph_array(input4)).toEqual(["a","e"])
-		})
-
-		it("epimorphs properly with include by index", function () {
-			expect(module.epimorph_array(input3)).toEqual(["b","d"])
-		})
-
-		it("epimorphs properly with the exclude by value", function () {
-			expect(module.epimorph_array(input2)).toEqual(["a","c","e"])
-		})
-
-		it("epimorphs properly with the exclude by index", function () {
-			expect(module.epimorph_array(input)).toEqual(["b","c","e"])
-		})
-	})
-
 	describe("homomorph", function () {
 		
 		var input, expected_array, maped_array
@@ -154,119 +104,174 @@
 		})
 	})
 
-	describe("copy", function () {
+	// describe("copy", function () {
 		
-		var input, input_2, output
-		input = { 
-			array        : [1,2,3],
-			object_array : [{ s : 1, b : 2 }, { s : 1, b : 2 }],
-			object       : {
-				s : 1,
-				b : 2
-			},
-			number: 55,
-			string: "stuff",
-		}
-		input_2 = {
-			o1 : {
-				stuff : "sd",
-				withs : "stuff",
-			},
-			o2 : {
-				o3 : "s",
-				o4 : "b"
-			}
-		}
+	// 	var input, input_2, output
+	// 	input = { 
+	// 		array        : [1,2,3],
+	// 		object_array : [{ s : 1, b : 2 }, { s : 1, b : 2 }],
+	// 		object       : {
+	// 			s : 1,
+	// 			b : 2
+	// 		},
+	// 		number: 55,
+	// 		string: "stuff",
+	// 	}
+	// 	input_2 = {
+	// 		o1 : {
+	// 			stuff : "sd",
+	// 			withs : "stuff",
+	// 		},
+	// 		o2 : {
+	// 			o3 : "s",
+	// 			o4 : "b"
+	// 		}
+	// 	}
 
-		it("doesent mess up sibling objects in an object", function () {
-			output = module.copy({ what : input_2 })
-			expect(output).toEqual({
-				o1 : {
-					stuff : "sd",
-					withs : "stuff",
-				},
-				o2 : {
-					o3 : "s",
-					o4 : "b"
-				}
-			})
-		})
+	// 	it("doesent mess up sibling objects in an object", function () {
+	// 		output = module.copy({ what : input_2 })
+	// 		expect(output).toEqual({
+	// 			o1 : {
+	// 				stuff : "sd",
+	// 				withs : "stuff",
+	// 			},
+	// 			o2 : {
+	// 				o3 : "s",
+	// 				o4 : "b"
+	// 			}
+	// 		})
+	// 	})
 
-		it("copies arrays without reference", function () {
-			output = module.copy({ what : input.array })
-			output.push("stuff")
-			expect(input.array.indexOf("stuff")).toEqual(-1)
-		})
+	// 	it("copies arrays without reference", function () {
+	// 		output = module.copy({ what : input.array })
+	// 		output.push("stuff")
+	// 		expect(input.array.indexOf("stuff")).toEqual(-1)
+	// 	})
 
-		it("copies object arrays without reference ", function () {
-			output = module.copy({ what : input.object_array, object_array : true })
-			output[0].s = "change"
-			expect(input.object_array[0].s).toEqual(1)
-		})
-	})
+	// 	it("copies object arrays without reference ", function () {
+	// 		output = module.copy({ what : input.object_array, object_array : true })
+	// 		output[0].s = "change"
+	// 		expect(input.object_array[0].s).toEqual(1)
+	// 	})
+	// })
 
 	describe("index loop", function () {
 		var input_1, input_2, input_3
 		input_1 = {
-			array   : [1,2,3],
+			subject   : [1,2,3],
 			else_do : function (loop) {
-				return loop.into.concat("member "+ loop.array[loop.index])
+				return loop.into.concat("member "+ loop.subject[loop.index])
 			}
 		},
 		input_2 = {
-			array   : [1,2,3],
+			subject   : [1,2,3],
 			else_do : function (loop) {
-				return loop.into.concat("member "+ loop.array[loop.index])
+				return loop.into.concat("member "+ loop.subject[loop.index])
 			}
 		},
 		input_3 = {
-			array   : [{ s : 1 }, { s : 2 }],
+			subject   : [{ s : 1 }, { s : 2 }],
 			else_do : function (loop) {
 				loop.indexed.s = "change"
 				return loop.into.concat(loop.indexed)
 			}
 		}
 
-		it("cointains no objects with reference to their originals within itself", function () {
-			var output = module.index_loop(input_3)
-			expect(input_3.array[0].s).toEqual(1)
-			expect(output[0].s).toEqual("change")
+		it("returns expected results", function () {
+			expect(module.index_loop(input_1)).toEqual(["member 1", "member 2", "member 3"])
 		})
 
-		it("has no reference upon completion to the input array", function () {
+		it("has no reference upon completion to the input subject", function () {
 			var output = module.index_loop(input_2)
-			input_2.array.push("stuff")
+			input_2.subject.push("stuff")
 			expect(output.indexOf("stuff")).toEqual(-1)
 		})
 
-		it("returns expected result with minimal paramaters and else do which returns into the \"into\" variable", function () {
-			expect(module.index_loop(input_1)).toEqual(["member 1", "member 2", "member 3"])
+		it("result has no reference to objects that were contianed in the input subject", function () {
+			var output = module.index_loop(input_3)
+			expect(input_3.subject[0].s).toEqual(1)
+			expect(output[0].s).toEqual("change")
 		})
+
 	})
 
 	describe("index loop base", function () {
-		var input, output
-		input = {
-			array    : [1,2,3],
+
+		var input, input_2, output, input_3, input_4, input_5
+
+		input   = {
+			subject  : [1,2,3],
 			start_at : 0,
 			into     : [],
 			if_done  : function (loop) {
 				return loop.into
 			},
 			else_do  : function (loop) {
-				loop.into = loop.into.concat("member "+ loop.array[loop.start_at])
+				loop.into = loop.into.concat("member "+ loop.subject[loop.start_at])
 				loop.start_at += 1
 				return loop
 			}
 		}
-		output = module.index_loop_base(input)
+		input_2 = {
+			subject  : 5,
+			start_at : 0,
+			into     : [],
+			if_done  : function (loop) {
+				return loop.into
+			},
+			else_do  : function (loop) {
+				loop.into      = loop.into.concat(loop.start_at)
+				loop.start_at += 1
+				return loop
+			}
+		}
+		input_3 = {
+			subject  : 5,
+			start_at : 2,
+			into     : [],
+			if_done  : function (loop) {
+				return loop.into
+			},
+			else_do  : function (loop) {
+				loop.into      = loop.into.concat(loop.start_at)
+				loop.start_at += 1
+				return loop
+			}
+		}
+		input_4 = {
+			subject  : 5,
+			start_at : -1,
+			into     : [],
+			if_done  : function (loop) {
+				return loop.into
+			},
+			else_do  : function (loop) {
+				loop.into      = loop.into.concat(loop.start_at)
+				loop.start_at += 1
+				return loop
+			}
+		}
+		output      = module.index_loop_base(input)
 
-		it("indexes properly", function () {
-			expect(output).toEqual(["member 1", "member 2", "member 3"])
+		it("indexes array", function () {
+			expect( output ).toEqual(["member 1", "member 2", "member 3"])
 		})
 
-		it("has no reference on completion to the input into object", function () {
+		it("indexes based on number", function() {
+			expect( module.index_loop_base(input_2) ).toEqual([0,1,2,3,4])	
+		})
+
+		it("indexes using the \"start_at\" as a starting point", function() {
+			expect( module.index_loop_base(input_3) ).toEqual([2,3,4])	
+		})
+
+		it("indexes using a negative \"start_at\" as a starting point", function() {
+			expect( module.index_loop_base(input_4) ).toEqual([-1,0,1,2,3,4])	
+		})
+
+		it("has no reference on completion to the input.into array", function () {
 			input.into.push("new stuff")
 			expect(output.indexOf("new stuff")).toEqual(-1)
 		})
+
 	})

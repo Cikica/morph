@@ -7,30 +7,6 @@
 })( 
 	window, 
 	{
-
-		copy : function (copy) {
-			if ( copy.what.constructor === Array && copy.object_array ) {
-				return this.index_loop({
-					array   : copy.what,
-					else_do : function (loop) {
-						return loop.into.concat(loop.indexed)
-					}
-				})
-			}
-			if (copy.what.constructor === Array) {
-				return copy.what.slice(0)
-			}
-			if (copy.what.constructor === Object) {
-				return this.homomorph({
-					object : copy.what,
-					with   : function (member) {
-						return member.value
-					}
-				})
-			}
-			return copy.what
-		},
-
 		// a structure perserving map
 		homomorph : function (what) {
 			
@@ -148,7 +124,7 @@
 			var self = this
 
 			return this.index_loop_base({
-				array    : loop.array,
+				subject  : loop.subject,
 				start_at : loop.start_at || 0,
 				into     : this.replace_with_default({ what : loop.into, default : [] }),
 				if_done  : loop.if_done  || function (base_loop) {
@@ -156,13 +132,13 @@
 				},
 				else_do : function (base_loop) {
 					return {
-						array    : self.copy({ what : base_loop.array }),
+						subject  : self.copy({ what : base_loop.subject }),
 						into     : loop.else_do({
-							array   : self.copy({ what : base_loop.array }),
+							subject : self.copy({ what : base_loop.subject }),
 							index   : base_loop.start_at,
 							into    : base_loop.into,
 							indexed : self.copy({
-								what : base_loop.array[base_loop.start_at]
+								what : base_loop.subject[base_loop.start_at]
 							})
 						}),
 						start_at : base_loop.start_at + 1,
@@ -174,12 +150,25 @@
 		},
 
 		index_loop_base : function (loop) {
+			
+			if ( loop.subject === undefined ) {
+				throw new this.exceptions.definition("index_loop_base \"subject\" paramter has not been declared")
+			}
 
-			if ( loop.start_at >= loop.array.length ) {
-				return loop.if_done(loop)
+			var length
+			
+			if ( loop.subject.constructor === Array )
+				length = loop.subject.length
+			
+			if ( loop.subject.constructor === Number )
+				length = loop.subject
+
+			if ( loop.start_at >= length ) {
+				return loop.if_done.call( {}, loop)
 			} else {
 				return this.index_loop_base(loop.else_do({
-					array    : this.copy({ what : loop.array }),
+					subject  : loop.subject,
+					length   : length,
 					start_at : loop.start_at,
 					into     : loop.into,
 					if_done  : loop.if_done,
@@ -188,49 +177,31 @@
 			}
 		},
 
-		index_loop_number : function (loop) {
-			if ( loop.start_at >= loop.of_times ) {
-				return loop.if_done(loop)
-			} else {
-				return this.index_loop_number(loop.else_do({
-					of_times : loop.of_times,
-					start_at : loop.start_at,
-					into     : loop.into,
-					if_done  : loop.if_done,
-					else_do  : loop.else_do
-				}))
-			}
-		},
-
-		pop_loop : function (loop) {
-			return this.pop_loop_base({
-				array   : loop.array,
-				into    : loop.into    || [],
-				if_done : loop.if_done || function (base_loop) {
-					return base_loop.into
-				},
-				else_do : function (base_loop) {
-					var index = base_loop.array.length-1
-					return {
-						array : base_loop.array.slice(0,index),
-						into  : loop.else_do({
-							array : base_loop.array.slice(0),
-							into  : base_loop.into,
-							index : index,
-						}),
-						if_done : base_loop.if_done,
-						else_do : base_loop.else_do,
+		copy : function (copy) {
+			
+			if ( copy.what.constructor === Array && copy.object_array ) {
+				return this.index_loop({
+					array   : copy.what,
+					else_do : function (loop) {
+						return loop.into.concat(loop.indexed)
 					}
-				}
-			})
-		},
-
-		pop_loop_base : function (loop) {
-			if ( loop.array.length < 1 ) {
-				return loop.if_done(loop)
-			} else {
-				return this.pop_loop_base(loop.else_do(loop))
+				})
 			}
+			
+			if (copy.what.constructor === Array) {
+				return copy.what.slice(0)
+			}
+			
+			if (copy.what.constructor === Object) {
+				return this.homomorph({
+					object : copy.what,
+					with   : function (member) {
+						return member.value
+					}
+				})
+			}
+			
+			return copy.what
 		},
 
 		replace_with_default : function (replace) {
@@ -238,6 +209,13 @@
 				return replace.default
 			else
 				return replace.what
+		},
+
+		exceptions : { 
+			definition : function (message) { 
+				this.name    = "Definition Error"
+				this.message = message
+			}
 		},
 		// someting that construct a list from something
 	}
