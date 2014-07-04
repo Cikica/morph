@@ -1,12 +1,9 @@
-Morphism
+Morph
 =====
-
-#### Functional helper library from the future ####
-
-Morphism is a library that comes with functinal methods for iterating arrays and objects.
+* stateless utility *
 
 #### History & Background #####
-Il get to writting one these, one these days.
+Il get to witting one these, one these days.
 
 Signed Mr.Slackaslack
 
@@ -14,13 +11,15 @@ Signed Mr.Slackaslack
 
 #### Homomorph
 
-Definition : 
+**Definition** : 
 
 ```javascript
 morph.homomorph({ object : {}, set : "(object|array)", with : function () {} })
 ```
 
-Examples : 
+**Examples** : 
+
+Map to object
 
 ```javascript
 var who
@@ -40,6 +39,8 @@ who = morph.homomorph({
 console.log( who ) 
 // => { title : "Countmwhaahaha", name : "Draculamwhaahaha" }
 ```
+
+Map to array
 
 ```javascript
 var who
