@@ -1,6 +1,6 @@
 Morph
 =====
-* stateless utility *
+*stateless utility*
 
 #### History & Background #####
 Il get to witting one these, one these days.
