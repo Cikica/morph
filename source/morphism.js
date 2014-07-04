@@ -59,43 +59,41 @@
 			return set
 		},
 
-		// this is an injective homomorphism or atleast should be
-		monomorph : function (what) {
-
-			var set, homomorph_function, with_function
+		inject_array : function ( what ) {
 			
-			set                = what.first_object
-			homomorph_function = function (member) {
-				return member.value
-			}
-			with_function      = what.with || function (detail) {
-				return detail.value
+			if ( what.with.constructor === Array ) { 
+				return what.array.concat( what.with )
 			}
 
-			for ( var property in what.second_object ) {
-
-				if ( what.second_object.hasOwnProperty(property) ) {
-
-					var new_value = what.second_object[property]
-
-					if ( what.second_object[property].constructor === Object )
-						new_value = this.homomorph({
-							object : what.second_object[property],
-							with   : homomorph_function
-						})
-
-					if ( what.second_object[property].constructor === Array )
-						new_value = what.second_object[property].slice(0)
-
-					what.first_object[property] = with_function.call({}, {
-						set           : set,
-						property_name : property,
-						value         : new_value
-					})
-				}
+			if ( what.with.constructor === Object ) {
+				return what.array.concat( this.homomorph({
+					object : what.with,
+					set    : "array"
+				}) )
 			}
 
-			return set
+			if ( what.with.constructor === Function ) {
+				return what.array.concat(this.index_loop({
+					subject : what.array,
+					else_do : function ( loop ) {
+						var evaluated
+						evaluated = what.with.call( {}, loop.subject[loop.index] )
+						if ( evaluated ) {
+							return loop.into.concat( evaluated )
+						} else { 
+							return loop.into
+						}
+					}
+				}))
+			}
+		},
+
+		surject_array : function ( what ) {
+			
+		},
+
+		biject : function () {
+
 		},
 
 		epimorph_array : function (loop) {

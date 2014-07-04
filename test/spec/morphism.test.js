@@ -154,7 +154,7 @@
 	// 		expect(input.object_array[0].s).toEqual(1)
 	// 	})
 	// })
-
+	
 	describe("index loop", function () {
 		var input_1, input_2, input_3
 		input_1 = {
@@ -274,4 +274,70 @@
 			expect(output.indexOf("new stuff")).toEqual(-1)
 		})
 
+	})
+
+	describe("inject array", function() {
+		var definition, input
+		definition = { 
+			array : [],
+			with  : [] || {} || function () {}
+		}
+
+		it("injects another array", function() {
+			expect( module.inject_array({
+				array : [1,2,3,4],
+				with  : [5,6,7,8]
+			})).toEqual( [1,2,3,4,5,6,7,8] )
+		})
+
+		it("injects another object", function() {
+			expect( module.inject_array({
+				array : [1,2,3,4],
+				with  : { s : "a", ss : "b", sss : "c" },
+			})).toEqual( [1,2,3,4, "a", "b", "c" ] )	
+		})
+
+		it("injects with the return values of a function", function () {
+			expect( module.inject_array({
+				array : [1,2,3,4],
+				with  : function ( member ) { 
+					return member * 2
+				}
+			})).toEqual( [1,2,3,4,2,4,6,8] )
+		})
+
+		it("injects only sometimes with a function", function () {
+			expect( module.inject_array({
+				array : [1,2,3,4],
+				with  : function ( member ) { 
+					if ( member % 2 === 0 ) {
+						return member * 2
+					} else {
+						return false
+					}
+				}
+			})).toEqual( [1,2,3,4,4,8] )
+		})
+	})
+
+	describe("surject array", function() {
+		
+		var definition
+		definition = { 
+			array : [],
+			with  : [] || {} || function () {},
+			by    : "(removing|extracting)"
+		}
+
+		it("removes members and returns whats left over", function() {
+			expect(module.surject_array({
+				array : [1,2,3,4],
+				with  : [2,4],
+				by    : "removing"
+			})).toBe([1,3])
+		})
+	})
+
+	describe("biject ", function() {
+		
 	})

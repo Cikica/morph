@@ -1,8 +1,8 @@
 Morph
 =====
-* stateless utility *
+*stateless utility*
 
-#### History & Background #####
+### History & Background
 Il get to witting one these, one these days.
 
 Signed Mr.Slackaslack
@@ -61,3 +61,8 @@ who = morph.homomorph({
 console.log( who ) 
 // => [ "Countmwhaahaha", "Draculamwhaahaha" ]
 ```
+
+### To Do
+
+* A method that maps new members onto an existing set and returns result
+* Unification of object and array looping
