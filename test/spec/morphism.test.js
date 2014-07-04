@@ -329,13 +329,13 @@
 			by    : "(removing|extracting)"
 		}
 
-		it("removes members and returns whats left over", function() {
-			expect(module.surject_array({
-				array : [1,2,3,4],
-				with  : [2,4],
-				by    : "removing"
-			})).toBe([1,3])
-		})
+		// it("removes members and returns whats left over", function() {
+		// 	expect(module.surject_array({
+		// 		array : [1,2,3,4],
+		// 		with  : [2,4],
+		// 		by    : "removing"
+		// 	})).toBe([1,3])
+		// })
 	})
 
 	describe("biject ", function() {

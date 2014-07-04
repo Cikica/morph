@@ -64,5 +64,7 @@ console.log( who )
 
 ### To Do
 
-* A method that maps new members onto an existing set and returns result
+* A method that maps new members onto an existing set and returns result ( injective )
+* A method that removes members from an existing set and returns leftover ( surjective )
+* A method that extracts members from an existing set and returns extraction ( surjective )
 * Unification of object and array looping
