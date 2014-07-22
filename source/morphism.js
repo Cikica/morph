@@ -89,7 +89,46 @@
 		},
 
 		surject_array : function ( what ) {
-			
+
+			return this.index_loop_base({
+				subject         : what.array,
+				start_at        : 0,
+				into            : {
+					extracted : [],
+					leftover  : []
+				},
+				if_done  : function ( loop ) {
+
+					if ( what.take === "extracted" ) {
+						return loop.into.extracted
+					}
+					
+					return loop.into.leftover
+				},
+				else_do  : function ( loop ) {
+
+					var index_of_value
+					index_of_value = ( what.by === "index" ? loop.start_at : loop.subject[loop.start_at] )
+					return {
+						subject         : loop.subject,
+						start_at        : loop.start_at + 1,
+						into            : { 
+							extracted : ( 
+								what.with.indexOf( index_of_value ) > -1 ? 
+									loop.into.extracted.concat(loop.subject[loop.start_at]) :
+									loop.into.extracted.slice(0)
+							),
+							leftover  : ( 
+								what.with.indexOf( index_of_value ) < 0 ?
+									loop.into.leftover.concat(loop.subject[loop.start_at]) :
+									loop.into.leftover.slice(0)	
+							)
+						},
+						if_done  : loop.if_done,
+						else_do  : loop.else_do
+					}
+				},
+			})
 		},
 
 		biject : function () {

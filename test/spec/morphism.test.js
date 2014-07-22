@@ -283,18 +283,18 @@
 			with  : [] || {} || function () {}
 		}
 
-		it("injects another array", function() {
+		it("injects array into an array", function() {
 			expect( module.inject_array({
 				array : [1,2,3,4],
 				with  : [5,6,7,8]
 			})).toEqual( [1,2,3,4,5,6,7,8] )
 		})
 
-		it("injects another object", function() {
+		it("injects an the values of an object into an array", function() {
 			expect( module.inject_array({
 				array : [1,2,3,4],
 				with  : { s : "a", ss : "b", sss : "c" },
-			})).toEqual( [1,2,3,4, "a", "b", "c" ] )	
+			})).toEqual( [1,2,3,4, "a", "b", "c" ] )
 		})
 
 		it("injects with the return values of a function", function () {
@@ -323,19 +323,50 @@
 	describe("surject array", function() {
 		
 		var definition
-		definition = { 
+		definition = {
 			array : [],
 			with  : [] || {} || function () {},
 			by    : "(removing|extracting)"
 		}
+		definition = {
+			array : [],
+			with  : [] || {} || function () {},
+			by    : "(index|value)"
+		}
 
-		// it("removes members and returns whats left over", function() {
-		// 	expect(module.surject_array({
-		// 		array : [1,2,3,4],
-		// 		with  : [2,4],
-		// 		by    : "removing"
-		// 	})).toBe([1,3])
-		// })
+		it("removes number members of an array and returns whats left over", function() {
+			expect(module.surject_array({
+				array : [1,2,3,4], 
+				with  : [2,4]
+			})).toEqual( [1,3] )
+		})
+
+		it("cant remove object members of an array based on value #!", function() {
+			expect(module.surject_array({
+				array : [{ s : 1 }, 2, { d : 2 }, 4],
+				with  : [{ s : 1 }, { d : 2 }]
+			})).not.toEqual([2,4])
+		})
+
+		it("removes object members of an array based on index and returns whats left over ", function() {
+			expect(module.surject_array({
+				array : [{ s : 1 }, 2, { d : 2 }, 4],
+				with  : [0,2],
+				by    : "index"
+			})).toEqual( [2,4] )
+		})
+
+		it("leftover members of an array which are objects still contain references to the orignal ones #!", function() {
+			
+			var pass, result
+			pass   = {
+				array : [{ s : 1 }, 2, { d : 2 }, 4],
+				with  : [1,2,3],
+				by    : "index"
+			}
+			result = module.surject_array(pass)
+			expect(result[0]).toBe(pass.array[0])
+		})
 	})
 
 	describe("biject ", function() {
