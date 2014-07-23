@@ -131,6 +131,138 @@
 			})
 		},
 
+
+		eq : function(a, b, aStack, bStack) {
+
+			if (a === b) {
+				return a !== 0 || 1 / a === 1 / b
+			}
+
+			if (a == null || b == null) {
+				return a === b
+			}
+
+			var className = toString.call(a)
+
+			if ( className !== toString.call( b ) ) {
+				return false
+			}
+
+			if ( className === '[object RegExp]' || className === '[object String]' ) {
+				return '' + a === '' + b
+			}
+
+			if ( className === '[object Number]' ) {
+
+				if ( +a !== +a ) {
+					return +b !== +b
+				}
+
+				return ( 
+					+a === 0 ? 
+						1 / +a === 1 / b :
+						+a === +b 
+				)
+			}
+
+			if ( className === '[object Date]' || className === '[object Boolean]' ) { 
+				return +a === +b
+			}
+
+    		if (typeof a != 'object' || typeof b != 'object') {
+    			return false
+    		}
+
+    		var length = aStack.length
+
+    		while (length--) {
+				// Linear search. Performance is inversely proportional to the number of
+				// unique nested structures.
+				if ( aStack[length] === a ) {
+					return bStack[length] === b
+				}
+    		}
+			
+			var aCtor, bCtor
+
+			aCtor = a.constructor
+			bCtor = b.constructor
+
+			if (
+				aCtor !== bCtor    &&
+				'constructor' in a && 
+				'constructor' in b &&
+				!(
+					aCtor.constructor === Function && 
+					aCtor instanceof aCtor         &&
+					bCtor.constructor === Function && 
+					bCtor instanceof bCtor
+				)
+			) {
+				return false
+			}
+
+			aStack = aStack.concat(a)
+			bStack = bStack.concat(b)
+
+			var size, result
+
+			if (className === '[object Array]') {
+
+				size   = a.length;
+				result = size === b.length;
+				if (result) {
+					while (size--) {
+						if ( !(result = this.eq(a[size], b[size], aStack, bStack) ) ) {
+							break
+						}
+					}
+				}
+
+			} else {
+
+				var keys, key
+
+				keys   = this.get_the_keys_of_an_object( a )
+				size   = keys.length
+				result = this.get_the_keys_of_an_object( b ).length === size;
+
+      			if (result) {
+					while (size--) {
+						key = keys[size]
+						if ( 
+							!( 
+								result = b.hasOwnProperty(key) &&
+								this.eq( a[key], b[key], aStack, bStack )
+							)
+						) {
+							break
+						}
+					}
+				}
+			}
+
+			aStack.pop()
+			bStack.pop()
+
+			return result
+  		},
+
+  		get_the_keys_of_an_object : function ( object ) { 
+  			var keys
+  			keys = []
+  			for ( var property in object ) { 
+  				if ( object.hasOwnProperty( property ) ) { 
+  					keys = keys.concat( property )
+  				}
+  			}
+  			return keys
+  		},
+
+		are_these_objects_the_same : function( object ) {
+			return this.eq( object.first , object.second, [], [] );
+		},
+
 		biject : function () {
 
 		},

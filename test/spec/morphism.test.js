@@ -276,6 +276,23 @@
 
 	})
 
+	describe("are these two objects the same", function() {
+		it("knows that two objects are the same", function() {
+			expect( module.are_these_objects_the_same({
+				first  : {
+					s : "1",
+					d : 2,
+					c : [1,23,4]
+				},
+				second : {
+					s : "1",
+					d : 2,
+					c : [1,23,4]
+				}
+			}) ).toBe(true)
+		})
+	})
+
 	describe("inject array", function() {
 		var definition, input
 		definition = { 
