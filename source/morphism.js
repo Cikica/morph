@@ -131,121 +131,150 @@
 			})
 		},
 
+		are_these_two_values_the_same : function(value) {
+			// this method is far to large to warrant existing on its own, thus it should be split up 
+			// into logical parts, such as ( are arrays idnetical, are objects identical, so forth )
+			// must find more logical parts to divide in as its a bit trickey
+			var self, first_value_type
 
-		eq : function(a, b, aStack, bStack) {
+			self               = this
+			first_value_type   = toString.call( value.first )
+			value.first_stack  = value.first_stack  || []
+			value.second_stack = value.second_stack || []
 
-			if (a === b) {
-				return a !== 0 || 1 / a === 1 / b
+			if ( value.first === value.second) {
+				return value.first !== 0 || 1 / value.first === 1 / value.second
 			}
 
-			if (a == null || b == null) {
-				return a === b
+			if ( value.first == null || value.second == null) {
+				return value.first === value.second
 			}
 
-			var className = toString.call(a)
-
-			if ( className !== toString.call( b ) ) {
+			if ( first_value_type !== toString.call( value.second ) ) {
 				return false
 			}
 
-			if ( className === '[object RegExp]' || className === '[object String]' ) {
-				return '' + a === '' + b
+			if ( first_value_type === '[object RegExp]' || first_value_type === '[object String]' ) {
+				return '' + value.first === '' + value.second
 			}
 
-			if ( className === '[object Number]' ) {
+			if ( first_value_type === '[object Number]' ) {
 
-				if ( +a !== +a ) {
-					return +b !== +b
+				if ( +value.first !== +value.first ) {
+					return +value.second !== +value.second
 				}
 
 				return ( 
-					+a === 0 ? 
-						1 / +a === 1 / b :
-						+a === +b 
+					+value.first === 0 ? 
+						1 / +value.first === 1 / +value.second :
+						+value.first === +value.second 
 				)
 			}
 
-			if ( className === '[object Date]' || className === '[object Boolean]' ) { 
-				return +a === +b
+			if ( first_value_type === '[object Date]' || first_value_type === '[object Boolean]' ) { 
+				return +value.first === +value.second
 			}
 
-    		if (typeof a != 'object' || typeof b != 'object') {
+    		if (typeof value.first !== 'object' || typeof value.second !== 'object') {
     			return false
     		}
 
-    		var length = aStack.length
+    		var does_any_value_match_the_stack
 
-    		while (length--) {
-				// Linear search. Performance is inversely proportional to the number of
-				// unique nested structures.
-				if ( aStack[length] === a ) {
-					return bStack[length] === b
-				}
+    		does_any_value_match_the_stack = this.while_greater_than_zero({
+				count   : value.first_stack.length,
+				into    : {
+					first_value_is_the_same  : false,
+					second_value_is_the_same : false
+				},
+				else_do : function ( loop ) {
+					if ( loop.into.do_we_return === false ) {
+						return { 
+							first_value_is_the_same  : value.first_stack[loop.count] === value.first,
+							second_value_is_the_same : value.second_stack[loop.count] === value.second
+						}
+					} else { 
+						return loop.into
+					}
+    			}
+    		})
+
+    		if ( does_any_value_match_the_stack.first_value_is_the_same ) { 
+    			return does_any_value_match_the_stack.second_value_is_the_same
     		}
 			
-			var aCtor, bCtor
+			var first_constructor, second_constructor
 
-			aCtor = a.constructor
-			bCtor = b.constructor
+			first_constructor = value.first.constructor
+			second_constructor = value.second.constructor
 
 			if (
-				aCtor !== bCtor    &&
-				'constructor' in a && 
-				'constructor' in b &&
+				first_constructor !== second_constructor &&
+				'constructor' in value.first             && 
+				'constructor' in value.second            &&
 				!(
-					aCtor.constructor === Function && 
-					aCtor instanceof aCtor         &&
-					bCtor.constructor === Function && 
-					bCtor instanceof bCtor
+					first_constructor.constructor === Function       &&
+					first_constructor instanceof first_constructor   &&
+					second_constructor.constructor === Function      &&
+					second_constructor instanceof second_constructor
 				)
 			) {
 				return false
 			}
 
-			aStack = aStack.concat(a)
-			bStack = bStack.concat(b)
+			value.first_stack = value.first_stack.concat(value.first)
+			value.second_stack = value.second_stack.concat(value.second)
 
-			var size, result
+			if ( first_value_type === '[object Array]' ) {
 
-			if (className === '[object Array]') {
+				var first_object_keys
 
-				size   = a.length;
-				result = size === b.length;
-				if (result) {
-					while (size--) {
-						if ( !(result = this.eq(a[size], b[size], aStack, bStack) ) ) {
-							break
-						}
-					}
-				}
+				first_object_keys = this.get_the_keys_of_an_object( value.first )
 
-			} else {
+      			if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
+      				return this.while_greater_than_zero({
+						count   : first_object_keys.length,
+						into    : false,
+						else_do : function ( loop ) {
 
-				var keys, key
+							var key_name
+							key_name = first_object_keys[loop.count]
 
-				keys   = this.get_the_keys_of_an_object( a )
-				size   = keys.length
-				result = this.get_the_keys_of_an_object( b ).length === size;
-
-      			if (result) {
-					while (size--) {
-						key = keys[size]
-						if ( 
-							!( 
-								result = b.hasOwnProperty(key) &&
-								this.eq( a[key], b[key], aStack, bStack )
+							return (
+								self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
 							)
-						) {
-							break
-						}
-					}
+      					}
+      				})
+				} else { 
+					return false
 				}
 			}
+			
+			if ( first_value_type === "[object Object]" ) {
 
-			aStack.pop()
-			bStack.pop()
+				var first_object_keys
 
-			return result
+				first_object_keys = this.get_the_keys_of_an_object( value.first )
+
+      			if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
+      				return this.while_greater_than_zero({
+						count   : first_object_keys.length,
+						into    : false,
+						else_do : function ( loop ) {
+
+							var key_name
+							key_name = first_object_keys[loop.count]
+
+							return (
+								value.second.hasOwnProperty( key_name ) && 
+								self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
+							)
+      					}
+      				})
+				} else { 
+					return false
+				}
+			}
   		},
 
   		get_the_keys_of_an_object : function ( object ) { 
@@ -259,12 +288,41 @@
   			return keys
   		},
 
-		are_these_objects_the_same : function( object ) {
-			return this.eq( object.first , object.second, [], [] );
-		},
-
 		biject : function () {
 
+		},
+
+		while_greater_than_zero : function ( loop ) { 
+			return this.base_loop({
+				count        : loop.count,
+				into         : loop.into,
+				is_done_when : function ( base_loop ) {
+					return ( base_loop.count === 0 )
+				},
+				if_done      : function ( base_loop ) {
+					return ( !loop.if_done ? base_loop.into : loop.if_done.call( {}, base_loop.into ) )
+				},
+				else_do      : function ( base_loop ) {
+					return {
+						count        : base_loop.count-1,
+						into         : loop.else_do.call({}, {
+							count : base_loop.count,
+							into  : base_loop.into
+						}),
+						is_done_when : base_loop.is_done_when,
+						if_done      : base_loop.if_done,
+						else_do      : base_loop.else_do,
+					}
+				}
+			})
+		},
+
+		base_loop : function ( loop ) {
+			if ( loop.is_done_when.call({}, loop) ) { 
+				return loop.if_done.call( {}, loop);
+			} else {
+				return this.base_loop( loop.else_do.call( {}, loop ) );
+			}
 		},
 
 		epimorph_array : function (loop) {

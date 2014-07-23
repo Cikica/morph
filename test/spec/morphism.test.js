@@ -103,57 +103,6 @@
 			expect( maped_array[4] ).not.toBe( expected_array[4] )
 		})
 	})
-
-	// describe("copy", function () {
-		
-	// 	var input, input_2, output
-	// 	input = { 
-	// 		array        : [1,2,3],
-	// 		object_array : [{ s : 1, b : 2 }, { s : 1, b : 2 }],
-	// 		object       : {
-	// 			s : 1,
-	// 			b : 2
-	// 		},
-	// 		number: 55,
-	// 		string: "stuff",
-	// 	}
-	// 	input_2 = {
-	// 		o1 : {
-	// 			stuff : "sd",
-	// 			withs : "stuff",
-	// 		},
-	// 		o2 : {
-	// 			o3 : "s",
-	// 			o4 : "b"
-	// 		}
-	// 	}
-
-	// 	it("doesent mess up sibling objects in an object", function () {
-	// 		output = module.copy({ what : input_2 })
-	// 		expect(output).toEqual({
-	// 			o1 : {
-	// 				stuff : "sd",
-	// 				withs : "stuff",
-	// 			},
-	// 			o2 : {
-	// 				o3 : "s",
-	// 				o4 : "b"
-	// 			}
-	// 		})
-	// 	})
-
-	// 	it("copies arrays without reference", function () {
-	// 		output = module.copy({ what : input.array })
-	// 		output.push("stuff")
-	// 		expect(input.array.indexOf("stuff")).toEqual(-1)
-	// 	})
-
-	// 	it("copies object arrays without reference ", function () {
-	// 		output = module.copy({ what : input.object_array, object_array : true })
-	// 		output[0].s = "change"
-	// 		expect(input.object_array[0].s).toEqual(1)
-	// 	})
-	// })
 	
 	describe("index loop", function () {
 		var input_1, input_2, input_3
@@ -276,9 +225,67 @@
 
 	})
 
-	describe("are these two objects the same", function() {
+	describe("base loop", function() {
+		it("loops basic stuff", function() {
+			expect(module.base_loop({
+				count        : 10,
+				into         : [],
+				is_done_when : function ( loop ) {
+					return ( loop.count === 0 )
+				},
+				if_done      : function ( loop ) {
+					return loop.into
+				},
+				else_do      : function ( loop ) {
+					return {
+						count        : loop.count-1,
+						into         : loop.into.concat(loop.count*2),
+						is_done_when : loop.is_done_when,
+						if_done      : loop.if_done,
+						else_do      : loop.else_do,
+					}
+				}
+			})).toEqual([  20, 18, 16, 14, 12, 10, 8, 6, 4, 2 ])
+		})	
+	})
+
+	describe("while greater than zero", function() {
+		
+		it("iterate with a if done and else do", function() {
+			expect(module.while_greater_than_zero({
+				count : 5,
+				into  : [],
+				if_done : function ( result ) {
+					return result.join("") + "/" + result[result.length-1]
+				},
+				else_do : function ( loop ) {
+					return loop.into.concat(loop.count*2)
+				}
+			})).toEqual("108642/2")
+		})
+
+		it("iterates without an if done", function() {
+			expect(module.while_greater_than_zero({
+				count : 5,
+				into  : [],
+				else_do : function ( loop ) {
+					return loop.into.concat(loop.count*2)
+				}
+			})).toEqual( [10,8,6,4,2] )	
+		})
+	})
+
+	describe("are these two values the same", function() {
+		
+		it("knows that two strings are the same", function() {
+			expect( module.are_these_two_values_the_same({
+				first  : "stuff",
+				second : "stuff"
+			})).toBe(true)
+		})
+
 		it("knows that two objects are the same", function() {
-			expect( module.are_these_objects_the_same({
+			expect( module.are_these_two_values_the_same({
 				first  : {
 					s : "1",
 					d : 2,
@@ -290,6 +297,61 @@
 					c : [1,23,4]
 				}
 			}) ).toBe(true)
+		})
+
+		it("knows that two nested objects are the same", function() {
+			
+			expect( module.are_these_two_values_the_same({
+				first  : {
+					s : "1",
+					d : 2,
+					b : { 
+						a : "stuff",
+						b : [1,2,4],
+						c : { 
+							a : "1",
+							b : "cda"
+						}
+					},
+					c : [1,23,4]
+				},
+				second : {
+					s : "1",
+					d : 2,
+					b : { 
+						a : "stuff",
+						b : [1,2,4],
+						c : { 
+							a : "1",
+							b : "cda"
+						}
+					},
+					c : [1,23,4]
+				}
+			}) ).toBe(true)	
+		})
+
+		it("knows that two objects are not the same", function() {
+			expect( module.are_these_two_values_the_same({
+				first  : {
+					s : "1",
+					d : 2,
+				},
+				second : {
+					s : "1",
+					d : 2,
+					b : { 
+						a : "stuff",
+						b : [1,2,4]
+					},
+					c : [1,23,4]
+				}
+			})).toBe(false)	
+
+			expect( module.are_these_two_values_the_same({
+				first  : [1,2,4],
+				second : [1,4]
+			})).toBe(false)
 		})
 	})
 
