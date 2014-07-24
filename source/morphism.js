@@ -131,7 +131,7 @@
 			})
 		},
 
-		are_these_two_values_the_same : function(value) {
+		are_these_two_values_the_same : function( value ) {
 			// this method is far to large to warrant existing on its own, thus it should be split up 
 			// into logical parts, such as ( are arrays idnetical, are objects identical, so forth )
 			// must find more logical parts to divide in as its a bit trickey
@@ -142,8 +142,8 @@
 			value.first_stack  = value.first_stack  || []
 			value.second_stack = value.second_stack || []
 
-			if ( value.first === value.second) {
-				return value.first !== 0 || 1 / value.first === 1 / value.second
+			if ( value.first === value.second ) {
+				return ( value.first !== 0 ) || ( 1 / value.first === 1 / value.second )
 			}
 
 			if ( value.first == null || value.second == null) {
@@ -222,58 +222,68 @@
 				return false
 			}
 
-			value.first_stack = value.first_stack.concat(value.first)
+			value.first_stack  = value.first_stack.concat(value.first)
 			value.second_stack = value.second_stack.concat(value.second)
 
 			if ( first_value_type === '[object Array]' ) {
-
-				var first_object_keys
-
-				first_object_keys = this.get_the_keys_of_an_object( value.first )
-
-      			if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
-      				return this.while_greater_than_zero({
-						count   : first_object_keys.length,
-						into    : false,
-						else_do : function ( loop ) {
-
-							var key_name
-							key_name = first_object_keys[loop.count]
-
-							return (
-								self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
-							)
-      					}
-      				})
-				} else { 
-					return false
-				}
+				return this.are_these_two_arrays_the_same( value )
 			}
-			
+
 			if ( first_value_type === "[object Object]" ) {
+				return this.are_these_two_objects_the_same( value )
+			}
+  		},
 
-				var first_object_keys
+  		are_these_two_arrays_the_same : function ( value ) {
 
-				first_object_keys = this.get_the_keys_of_an_object( value.first )
+  			var first_object_keys, self
 
-      			if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
-      				return this.while_greater_than_zero({
-						count   : first_object_keys.length,
-						into    : false,
-						else_do : function ( loop ) {
+  			self              = this
+			first_object_keys = this.get_the_keys_of_an_object( value.first )
 
-							var key_name
-							key_name = first_object_keys[loop.count]
+      		if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
+      			return this.while_greater_than_zero({
+					count   : first_object_keys.length,
+					into    : false,
+					else_do : function ( loop ) {
 
-							return (
-								value.second.hasOwnProperty( key_name ) && 
-								self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
-							)
-      					}
-      				})
-				} else { 
-					return false
-				}
+						var key_name
+						key_name = first_object_keys[loop.count]
+
+						return (
+							self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
+						)
+      				}
+      			})
+			} else { 
+				return false
+			}
+  		},
+
+  		are_these_two_objects_the_same : function ( value ) {
+
+  			var self, first_object_keys
+
+  			self              = this
+			first_object_keys = this.get_the_keys_of_an_object( value.first )
+
+      		if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
+      			return this.while_greater_than_zero({
+					count   : first_object_keys.length,
+					into    : false,
+					else_do : function ( loop ) {
+
+						var key_name
+						key_name = first_object_keys[loop.count]
+
+						return (
+							value.second.hasOwnProperty( key_name ) && 
+							self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
+						)
+      				}
+      			})
+			} else { 
+				return false
 			}
   		},
 
@@ -323,27 +333,6 @@
 			} else {
 				return this.base_loop( loop.else_do.call( {}, loop ) );
 			}
-		},
-
-		epimorph_array : function (loop) {
-			return this.index_loop({
-				array   : loop.array,
-				else_do : function (index_loop) {
-					if ( 
-						
-						 loop.by_index && loop.exclude && loop.exclude.indexOf(index_loop.index)   <  0 ||
-						!loop.by_index && loop.exclude && loop.exclude.indexOf(index_loop.indexed) <  0 ||
-
-						 loop.by_index && loop.include && loop.include.indexOf(index_loop.index)   > -1 ||
-						!loop.by_index && loop.include && loop.include.indexOf(index_loop.indexed) > -1
-
-					) {
-						return index_loop.into.concat(index_loop.indexed)
-					} else {
-						return index_loop.into
-					}
-				}
-			})
 		},
 
 		index_loop : function (loop) {
