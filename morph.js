@@ -301,6 +301,17 @@
   			return keys
   		},
 
+  		get_the_values_of_an_object : function ( object ) { 
+  			var keys
+  			keys = []
+  			for ( var property in object ) { 
+  				if ( object.hasOwnProperty( property ) ) { 
+  					keys = keys.concat( object[property] )
+  				}
+  			}
+  			return keys
+  		},
+
 		biject : function () {
 
 		},
