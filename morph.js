@@ -7,6 +7,9 @@
 })( 
 	window, 
 	{
+		define : { 
+			allow : "*"
+		},
 		// a structure perserving map
 		homomorph : function (what) {
 			
