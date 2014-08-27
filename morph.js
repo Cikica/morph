@@ -13,8 +13,9 @@
 		// a structure perserving map
 		homomorph : function (what) {
 			
-			var set, with_function_for_nested_objects, with_function
+			var set, with_function_for_nested_objects, with_function, count
 
+			count                            = -1
 			set                              = ( what.set === "array" ? [] : {} )
 			with_function_for_nested_objects = function (member) {
 				return member.value
@@ -26,7 +27,9 @@
 
 				if ( what.object.hasOwnProperty(property) ) {
 
-					var new_value = what.object[property]
+					var new_value, count
+					count     = count + 1
+					new_value = what.object[property]
 
 					if ( what.object[property].constructor === Object )
 						new_value = this.homomorph({
@@ -42,6 +45,7 @@
 							value         : new_value,
 							property_name : property,
 							set           : set,
+							count         : count
 						})
 						set = set.concat(( 
 							return_value.constructor === Array ?
@@ -55,6 +59,7 @@
 							value         : new_value,
 							property_name : property,
 							set           : set,
+							count         : count
 						})
 				}
 			}
