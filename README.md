@@ -11,47 +11,83 @@ Signed Mr.Slackaslack
 
 #### Homomorph
 
-**Definition** : 
+**Definition** :
 
 ```javascript
 morph.object_loop({ 
 	"subject"  : {}, 
-	"if_done?" : function ( loop ) { 
-		console.log( loop )
-		=> {
-			object : Object,
-			key    : Array,
-			value  : Array
-		}
+	"if_done?" : function ( loop ) {
+		/*
+			console.log( loop )
+			=> {
+				object : Object,
+				key    : Array,
+				value  : Array
+			}
+		*/
 		return Anything
 	},
 	"else_do"  : function ( loop ) {
-		console.log( loop ) 
-		=> {
-			index : Number,
-			key   : String,
-			value : String || Number || Object || Array
-		}
+		/*
+			console.log( loop ) 
+			=> {
+				index : Number,
+				key   : String,
+				value : String || Number || Object || Array
+			}
+		*/
 
 		return { 
 			key   : Number,
 			value : String || Number || Object || Array
 		}
 	}
+}) => Anything
+```
+
+**Examples** :
+
+```javascript
+var result
+result = morph.object_loop({
+	"subject" : {
+		s : "d",
+		b : "some"
+	},
+	"else_do" : function ( loop ) {
+		return {
+			key   : loop.index + "2" + loop.key,
+			value : loop.value + loop.index + "4"
+		}
+	}
 })
+console.log( result )
+=> {
+	"02s" : "d04",
+	"12b" : "some14",
+}
 ```
 
 ```javascript
-var who
-who = morph.object_loop({
-	subject : {},
-	if_done : function ( loop ) {},
-	else_do : function ( loop ) {
-
+var result
+result = morph.object_loop({
+	"subject" : {
+		s : "d",
+		b : "some"
 	},
+	"if_done?" : function ( loop ) { 
+		console.log( loop )
+		return [ loop.key[0], loop.value[0], loop.key[1], loop.value[1] ].join(":")
+	},
+	"else_do" : function ( loop ) {
+		return {
+			key   : loop.index + "2" + loop.key,
+			value : loop.value + loop.index + "4"
+		}
+	}
 })
-console.log( who ) 
-=> 
+console.log( result )
+=> "02s:d04:12b:some14"
 ```
 
 ### To Do

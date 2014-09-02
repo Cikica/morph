@@ -454,13 +454,13 @@
 				is_done_when : function ( base_loop ) { 
 					return ( base_loop.map.key.length === key.length )
 				},
-				if_done      : function ( base_loop ) {
+				if_done     : function ( base_loop ) {
 					var object = self.get_object_from_array({
 						key   : base_loop.map.key,
 						value : base_loop.map.value
 					})
-					return ( loop.if_done ? 
-						loop.if_done({ 
+					return ( loop["if_done?"] ? 
+						loop["if_done?"].call({}, { 
 							key    : base_loop.map.key.slice(0),
 							value  : base_loop.map.value.slice(0),
 							object : object
