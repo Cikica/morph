@@ -439,10 +439,12 @@
 		},
 
 		object_loop : function ( loop ) { 
+			
 			var key, value, self
 			self  = this
 			key   = this.get_the_keys_of_an_object( loop.subject )
 			value = this.get_the_values_of_an_object( loop.subject )
+
 			return this.base_loop({
 				length       : key.length,
 				index        : 0,
@@ -452,8 +454,8 @@
 					"value" : [],
 					"into"  : loop["into?"] || ""
 				},
-				is_done_when : function ( base_loop ) { 
-					return ( base_loop.map.key.length === key.length )
+				is_done_when : function ( base_loop ) {
+					return ( base_loop.index === key.length )
 				},
 				if_done     : function ( base_loop ) {
 					var result, object
@@ -471,7 +473,7 @@
 						})
 					}
 					
-					if ( loop["into?"] ) {
+					if ( loop["into?"] !== undefined ) {
 						result = base_loop.map.into
 					}
 
@@ -488,8 +490,8 @@
 					return {
 						length       : base_loop.length,
 						map          : {
-							key   : base_loop.map.key.concat(given.key),
-							value : base_loop.map.value.concat(given.value),
+							key   : base_loop.map.key.concat(   given.key   || base_loop.map.key ),
+							value : base_loop.map.value.concat( given.value || base_loop.map.value ),
 							into  : given.into || base_loop.map.into
 						},
 						index        : base_loop.index + 1,
