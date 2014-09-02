@@ -438,6 +438,59 @@
 			}
 		},
 
+		object_loop : function ( loop ) { 
+			var key, value, self
+			self  = this
+			key   = this.get_the_keys_of_an_object( loop.subject )
+			value = this.get_the_values_of_an_object( loop.subject )
+			return this.base_loop({
+				length       : key.length,
+				index        : 0,
+				subject      : key.slice(0),
+				map          : {
+					key   : [],
+					value : []
+				},
+				is_done_when : function ( base_loop ) { 
+					return ( base_loop.map.key.length === key.length )
+				},
+				if_done      : function ( base_loop ) {
+					var object = self.get_object_from_array({
+						key   : base_loop.map.key,
+						value : base_loop.map.value
+					})
+					return ( loop.if_done ? 
+						loop.if_done({ 
+							key    : base_loop.map.key.slice(0),
+							value  : base_loop.map.value.slice(0),
+							object : object
+						}) : 
+						object
+					)
+				},
+				else_do      : function ( base_loop ) {
+					var given
+					given = loop.else_do.call({}, {
+						key   : key[base_loop.index],
+						value : value[base_loop.index],
+						index : base_loop.index
+					})
+					return {
+						length       : base_loop.length,
+						map          : {
+							key   : base_loop.map.key.concat(given.key),
+							value : base_loop.map.value.concat(given.value)
+						},
+						index        : base_loop.index + 1,
+						is_done_when : base_loop.is_done_when,
+						if_done      : base_loop.if_done,
+						else_do      : base_loop.else_do,
+					}
+				}
+			})
+
+		},
+
 		copy : function (copy) {
 			
 			if ( copy.what.constructor === Array && copy.object_array ) {

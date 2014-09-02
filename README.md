@@ -14,52 +14,44 @@ Signed Mr.Slackaslack
 **Definition** : 
 
 ```javascript
-morph.homomorph({ object : {}, set : "(object|array)", with : function () {} })
+morph.object_loop({ 
+	"subject"  : {}, 
+	"if_done?" : function ( loop ) { 
+		console.log( loop )
+		=> {
+			object : Object,
+			key    : Array,
+			value  : Array
+		}
+		return Anything
+	},
+	"else_do"  : function ( loop ) {
+		console.log( loop ) 
+		=> {
+			index : Number,
+			key   : String,
+			value : String || Number || Object || Array
+		}
+
+		return { 
+			key   : Number,
+			value : String || Number || Object || Array
+		}
+	}
+})
 ```
-
-**Examples** : 
-
-Map to object
 
 ```javascript
 var who
-who = morph.homomorph({
-	object : {
-		title : "Count",
-		name  : "Dracula"
+who = morph.object_loop({
+	subject : {},
+	if_done : function ( loop ) {},
+	else_do : function ( loop ) {
+
 	},
-	with   : function ( member ) {
-		// first iteration
-		member.value         // => Count
-		member.property_name // => title
-		member.set           // => {}
-		return member.value + "mwhaahaha"
-	}
 })
 console.log( who ) 
-// => { title : "Countmwhaahaha", name : "Draculamwhaahaha" }
-```
-
-Map to array
-
-```javascript
-var who
-who = morph.homomorph({
-	object : {
-		title : "Count",
-		name  : "Dracula"
-	},
-	set    : "array",
-	with   : function ( member ) {
-		// first iteration
-		member.value         // => Count
-		member.property_name // => title
-		member.set           // => []
-		return member.value + "mwhaahaha"
-	}
-})
-console.log( who ) 
-// => [ "Countmwhaahaha", "Draculamwhaahaha" ]
+=> 
 ```
 
 ### To Do
