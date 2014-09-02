@@ -448,38 +448,49 @@
 				index        : 0,
 				subject      : key.slice(0),
 				map          : {
-					key   : [],
-					value : []
+					"key"   : [],
+					"value" : [],
+					"into"  : loop["into?"] || ""
 				},
 				is_done_when : function ( base_loop ) { 
 					return ( base_loop.map.key.length === key.length )
 				},
 				if_done     : function ( base_loop ) {
-					var object = self.get_object_from_array({
+					var result, object
+					object = self.get_object_from_array({
 						key   : base_loop.map.key,
 						value : base_loop.map.value
 					})
-					return ( loop["if_done?"] ? 
-						loop["if_done?"].call({}, { 
+
+					if ( loop["if_done?"] ) { 
+						result = loop["if_done?"].call({}, { 
 							key    : base_loop.map.key.slice(0),
 							value  : base_loop.map.value.slice(0),
+							into   : base_loop.map.into,
 							object : object
-						}) : 
-						object
-					)
+						})
+					}
+					
+					if ( loop["into?"] ) {
+						result = base_loop.map.into
+					}
+
+					return result || object
 				},
 				else_do      : function ( base_loop ) {
 					var given
 					given = loop.else_do.call({}, {
-						key   : key[base_loop.index],
-						value : value[base_loop.index],
-						index : base_loop.index
+						"key"   : key[base_loop.index],
+						"value" : value[base_loop.index],
+						"into"  : base_loop.map.into,
+						"index" : base_loop.index
 					})
 					return {
 						length       : base_loop.length,
 						map          : {
 							key   : base_loop.map.key.concat(given.key),
-							value : base_loop.map.value.concat(given.value)
+							value : base_loop.map.value.concat(given.value),
+							into  : given.into || base_loop.map.into
 						},
 						index        : base_loop.index + 1,
 						is_done_when : base_loop.is_done_when,

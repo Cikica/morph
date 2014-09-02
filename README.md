@@ -15,14 +15,16 @@ Signed Mr.Slackaslack
 
 ```javascript
 morph.object_loop({ 
-	"subject"  : {}, 
+	"subject"  : {},
+	"into?"    : Anything,
 	"if_done?" : function ( loop ) {
 		/*
 			console.log( loop )
 			=> {
 				object : Object,
 				key    : Array,
-				value  : Array
+				value  : Array,
+				into   : Anything
 			}
 		*/
 		return Anything
@@ -33,13 +35,15 @@ morph.object_loop({
 			=> {
 				index : Number,
 				key   : String,
-				value : String || Number || Object || Array
+				value : String || Number || Object || Array,
+				into  : Anything
 			}
 		*/
 
 		return { 
 			key   : Number,
-			value : String || Number || Object || Array
+			value : String || Number || Object || Array,
+			into  : Anything
 		}
 	}
 }) => Anything

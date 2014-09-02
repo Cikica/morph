@@ -523,8 +523,7 @@
 					s : "d",
 					b : "some"
 				},
-				"if_done?" : function ( loop ) { 
-					console.log( loop )
+				"if_done?" : function ( loop ) {
 					return [ loop.key[0], loop.value[0], loop.key[1], loop.value[1] ].join(":")
 				},
 				else_do : function ( loop ) {
@@ -534,5 +533,22 @@
 					}
 				}
 			})).toEqual("02s:d04:12b:some14")
+		})
+
+		it("loops through an object with the into", function() {
+			expect(module.object_loop({
+				subject : {
+					s : "d",
+					b : "some"
+				},
+				"into?"    : "some",
+				else_do : function ( loop ) {
+					return {
+						key   : loop.index + "2" + loop.key,
+						value : loop.value + loop.index + "4",
+						into  : loop.into + "s"
+					}
+				}
+			})).toEqual("somess")
 		})
 	})
