@@ -509,3 +509,82 @@
 	describe("biject ", function() {
 		
 	})
+
+	describe("get the values of an object", function() {
+		it("gets the values", function() {
+			expect(module.get_the_values_of_an_object({
+				s : 1,
+				d : 2
+			})).toEqual([1,2])
+		})
+		it("gets arrays rather than joining them into one", function() {
+			expect(module.get_the_values_of_an_object({
+				s : [1,2,3],
+				d : 2
+			})).toEqual([ [1,2,3], 2 ])
+		})
+	})
+
+	describe("get the keys of an object", function() {
+		it("gets the values", function() {
+			expect(module.get_the_keys_of_an_object({
+				s : 1,
+				d : 2
+			})).toEqual([ "s", "d" ])
+		})
+	})
+
+	describe("object loop", function() {
+		it("loops through an object with a simple else do", function() {
+			expect(module.object_loop({
+				subject : {
+					s : "d",
+					b : "some"
+				},
+				else_do : function ( loop ) {
+					return {
+						key   : loop.index + "2" + loop.key,
+						value : loop.value + loop.index + "4"
+					}
+				}
+			})).toEqual({
+				"02s" : "d04",
+				"12b" : "some14",
+			})
+		})
+
+		it("loops through an object with an if done", function() {
+			expect(module.object_loop({
+				subject : {
+					s : "d",
+					b : "some"
+				},
+				"if_done?" : function ( loop ) {
+					return [ loop.key[0], loop.value[0], loop.key[1], loop.value[1] ].join(":")
+				},
+				else_do : function ( loop ) {
+					return {
+						key   : loop.index + "2" + loop.key,
+						value : loop.value + loop.index + "4"
+					}
+				}
+			})).toEqual("02s:d04:12b:some14")
+		})
+
+		it("loops through an object with the into", function() {
+			expect(module.object_loop({
+				subject : {
+					s : "d",
+					b : "some"
+				},
+				"into?"    : "some",
+				else_do : function ( loop ) {
+					return {
+						key   : loop.index + "2" + loop.key,
+						value : loop.value + loop.index + "4",
+						into  : loop.into + "s"
+					}
+				}
+			})).toEqual("somess")
+		})
+	})
