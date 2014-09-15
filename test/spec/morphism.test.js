@@ -476,6 +476,36 @@
 		})
 	})
 
+	describe("surject object", function() {
+		it("removes a single key and value by key", function() {
+			var pass, result
+			pass = {
+				object : { "some" : "name", "another" : "value" },
+				with   : ["some"],
+				by     : "key"
+
+			}
+			result = module.surject_object(pass)
+			expect(result).toEqual({ "another" : "value" })
+		})
+
+		it("removes a several keys and values by key", function() {
+			var pass, result
+			pass = {
+				object : { 
+					"some"     : "name", 
+					"another"  : "value",
+					"another2" : "values",
+				},
+				with   : ["some", "another"],
+				by     : "key"
+
+			}
+			result = module.surject_object(pass)
+			expect(result).toEqual({ "another2" : "values" })
+		})
+	})
+
 	describe("biject ", function() {
 		
 	})

@@ -139,6 +139,38 @@
 			})
 		},
 
+		surject_object : function ( what ) { 
+			var key, value, what_to_remove
+			key   = this.get_the_keys_of_an_object( what.object )
+			value = this.get_the_values_of_an_object( what.object )
+
+			if ( what.by === "key" ) { 
+				var removed_key_index, new_key
+				removed_key_index = this.index_loop({
+					subject : key,
+					else_do : function ( loop ) { 
+						return ( what.with.indexOf( loop.indexed ) > -1 ?
+							loop.into.concat( loop.index ) : 
+							loop.into 
+						)
+					}
+				})
+				
+				return this.get_object_from_array({
+					key : this.surject_array({
+						array : key,
+						with  : removed_key_index,
+						by    : "index",
+					}),
+					value : this.surject_array({
+						array : value,
+						with  : removed_key_index,
+						by    : "index",
+					})
+				})
+			}
+		},
+
 		are_these_two_values_the_same : function( value ) {
 			// this method is far to large to warrant existing on its own, thus it should be split up 
 			// into logical parts, such as ( are arrays idnetical, are objects identical, so forth )
@@ -413,7 +445,7 @@
 		index_loop_base : function (loop) {
 			
 			if ( loop.subject === undefined ) {
-				throw new this.exceptions.definition("index_loop_base \"subject\" paramter has not been declared")
+				console.error("The loop \"subject\" has not been specified")
 			}
 
 			var length
