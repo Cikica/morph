@@ -530,10 +530,13 @@
 			}
 			
 			if (copy.what.constructor === Object) {
-				return this.homomorph({
-					object : copy.what,
-					with   : function (member) {
-						return member.value
+				return this.object_loop({
+					subject : copy.what,
+					else_do : function ( loop ) {
+						return {
+							key   : loop.key,
+							value : loop.value
+						}
 					}
 				})
 			}
