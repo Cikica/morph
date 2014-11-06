@@ -512,7 +512,10 @@
 						})
 					}
 					
-					if ( loop["into?"] !== undefined ) {
+					if ( 
+						loop["into?"]    !== undefined &&
+						loop["if_done?"] === undefined
+					) {
 						result = base_loop.map.into
 					}
 
