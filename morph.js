@@ -18,9 +18,14 @@
 			}
 
 			if ( what.with.constructor === Object ) {
-				return what.array.concat( this.homomorph({
-					object : what.with,
-					set    : "array"
+				return what.array.concat( this.object_loop({
+					subject : what.with,
+					"into?" : [],
+					else_do : function ( loop ) { 
+						return { 
+							into : loop.into.concat( loop.value )
+						}
+					}
 				}) )
 			}
 
@@ -38,6 +43,37 @@
 					}
 				}))
 			}
+		},
+
+		does_array_contain_this_value : function ( contained ) { 
+			var self = this
+			return this.index_loop_base({
+				subject  : contained.array,
+				into     : false,
+				start_at : 0,
+				if_done  : function ( loop ) { 
+					return loop.into
+				},
+				else_do : function ( loop ) {
+					var does_contained_value_match_indexed_value
+					does_contained_value_match_indexed_value = self.are_these_two_values_the_same({
+						first  : loop.subject[loop.start_at],
+						second : contained.value
+					})
+					console.log( does_contained_value_match_indexed_value )
+					return {
+						subject         : loop.subject,
+						start_at        : (
+							does_contained_value_match_indexed_value ? 
+								loop.subject.length-1 :
+								loop.start_at + 1
+						),
+						into    : does_contained_value_match_indexed_value,
+						if_done : loop.if_done,
+						else_do : loop.else_do
+					}
+				}
+			})
 		},
 
 		surject_array : function ( what ) {
@@ -218,58 +254,90 @@
 			}
   		},
 
-  		are_these_two_arrays_the_same : function ( value ) {
-
-  			var first_object_keys, self
-
-  			self              = this
-			first_object_keys = this.get_the_keys_of_an_object( value.first )
-
-      		if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
-      			return this.while_greater_than_zero({
-					count   : first_object_keys.length,
-					into    : false,
-					else_do : function ( loop ) {
-
-						var key_name
-						key_name = first_object_keys[loop.count]
-
-						return (
-							self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
-						)
-      				}
-      			})
-			} else { 
-				return false
-			}
-  		},
-
   		are_these_two_objects_the_same : function ( value ) {
 
-  			var self, first_object_keys
+  			var self, first_object_keys, second_object_keys
 
-  			self              = this
-			first_object_keys = this.get_the_keys_of_an_object( value.first )
+			self               = this
+			first_object_keys  = this.get_the_keys_of_an_object( value.first )
+			second_object_keys = this.get_the_keys_of_an_object( value.second )
 
-      		if ( this.get_the_keys_of_an_object( value.second ).length === first_object_keys.length ) {
+      		if ( second_object_keys.length === first_object_keys.length ) {
       			return this.while_greater_than_zero({
 					count   : first_object_keys.length,
 					into    : false,
 					else_do : function ( loop ) {
 
-						var key_name
-						key_name = first_object_keys[loop.count]
+						var key_name, second_object_has_same_name_key, ascending_index
+						
+						ascending_index                 = first_object_keys.length-loop.count
+						key_name                        = first_object_keys[ascending_index]
+						second_object_has_same_name_key = value.second.hasOwnProperty( key_name )
 
-						return (
-							value.second.hasOwnProperty( key_name ) && 
-							self.are_these_two_values_the_same( value.first[key_name], value.second[key_name], value.first_stack, value.second_stack )
-						)
+						if ( second_object_has_same_name_key ) {
+							return self.are_these_two_values_the_same({
+								first  : value.first[key_name],
+								second : value.second[key_name]
+							})
+						}
+
+						return false
       				}
       			})
 			} else { 
 				return false
 			}
   		},
+
+  		are_these_two_arrays_the_same : function ( value ) {
+
+  			var self, sorted_first_array, sorted_second_array
+
+			self                = this
+			sorted_first_array  = value.first.slice().sort()
+			sorted_second_array = value.second.slice().sort()
+			return this.index_loop({
+				subject : sorted_first_array,
+				into    : false,
+				else_do : function ( loop ) {
+					var are_the_two_values_the_same
+					are_the_two_values_the_same = self.are_these_two_values_the_same({
+						first  : loop.indexed,
+						second : value.second[key_name]
+					})
+					loop.indexed
+					return false
+				}
+			})
+
+			console.log( value )
+   //    		if ( second_object_keys.length === first_object_keys.length ) {
+   //    			return this.while_greater_than_zero({
+			// 		count   : first_object_keys.length,
+			// 		into    : false,
+			// 		else_do : function ( loop ) {
+
+			// 			var key_name, second_object_has_same_name_key, ascending_index
+						
+			// 			ascending_index                 = first_object_keys.length-loop.count
+			// 			key_name                        = first_object_keys[ascending_index]
+			// 			second_object_has_same_name_key = value.second.hasOwnProperty( key_name )
+
+			// 			if ( second_object_has_same_name_key ) {
+			// 				return self.are_these_two_values_the_same({
+			// 					first  : value.first[key_name],
+			// 					second : value.second[key_name]
+			// 				})
+			// 			}
+
+			// 			return false
+   //    				}
+   //    			})
+			// } else { 
+			// 	return false
+			// }
+  		},
+
 
   		get_the_keys_of_an_object : function ( object ) { 
   			var keys
