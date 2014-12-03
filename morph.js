@@ -45,6 +45,33 @@
 			}
 		},
 
+		inject_object : function ( what ) {
+
+			if ( what.with.constructor === Array ) {
+				return this.index_loop({
+					subject : what.with,
+					into    : what.object,
+					else_do : function ( loop ) {
+						loop.into[loop.index] = loop.indexed
+						return loop.into
+					}
+				})
+			}
+
+			if ( what.with.constructor === Object ) {
+				return this.object_loop({
+					subject : what.with,
+					"into?" : what.object,
+					else_do : function ( loop ) { 
+						loop.into[loop.key] = loop.value
+						return { 
+							into : loop.into
+						}
+					}
+				})
+			}
+		},
+
 		does_array_contain_this_value : function ( contained ) { 
 			var self = this
 			return this.index_loop_base({

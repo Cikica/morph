@@ -296,6 +296,41 @@
 		})
 	})
 
+	describe("inject object", function() {
+
+		it("injects an object into an object", function() {
+			expect( module.inject_object({
+				object : { 
+					s : "some",
+					d : "some other"
+				},
+				with : { 
+					c : "another some"
+				}
+			})).toEqual({
+				s : "some",
+				d : "some other",
+				c : "another some"
+			})
+		})
+
+		it("injects an array into an object", function() {
+			expect( module.inject_object({
+				object : { 
+					a : "some",
+					b : "some other"
+				},
+				with : ["a", "b", "c"]
+			})).toEqual({
+				"a" : "some",
+				"b" : "some other",
+				"0" : "a",
+				"1" : "b",
+				"2" : "c"
+			})
+		})
+	})
+
 	describe("inject array", function() {
 		var definition, input
 		definition = { 
