@@ -238,8 +238,58 @@
 			})
 		},
 
-		biject_array : function () { 
+		biject_array : function ( biject ) {
 
+			var self, array, into
+			self  = this
+			array = (
+				biject.array.constructor === HTMLCollection ?
+					self.convert_node_list_to_array( biject.array ) :
+					biject.array
+			)
+
+			// return this.base_loop({
+			// 	"index"   : 0,
+			// 	"length"  : biject.array.length,
+			// 	"subject" : array,
+			// 	"into"    : biject.into.slice(0),
+			// 	"result"  : [],
+			// 	is_done_when : function ( base_loop ) {
+			// 		return ( base_loop.index === key.length )
+			// 	},
+			// 	if_done : function ( base_loop ) { 
+			// 		return 
+			// 	},
+			// 	else_do      : function ( base_loop ) {
+			// 	}
+			// })
+
+			// return this.index_loop_base({
+			// 	"subject"  : [],
+			// 	"start_at" : 0,
+			// 	"into"     : [],
+			// 	if_done  : function (base_loop) {
+			// 		return base_loop.into
+			// 	},
+			// 	else_do : function (base_loop) {
+			// 		return {
+			// 			"subject"  : self.copy({
+			// 				what : base_loop.subject 
+			// 			}),
+			// 			"into"     : base_loop.into.concat(
+			// 				biject.with({
+			// 					"index"   : base_loop.start_at,
+			// 					"indexed" : self.copy({
+			// 						what : base_loop.subject[base_loop.start_at]
+			// 					})
+			// 				})
+			// 			),
+			// 			"start_at" : base_loop.start_at + 1,
+			// 			"if_done"  : base_loop.if_done,
+			// 			"else_do"  : base_loop.else_do
+			// 		}
+			// 	}
+			// })
 		},
 
 		object_loop : function ( loop ) { 
@@ -611,7 +661,7 @@
 
 			return this.index_loop_base({
 				subject  : ( 
-					loop.subject.constructor === HTMLCollection ? 
+					loop.subject.constructor === HTMLCollection ?
 						self.convert_node_list_to_array( loop.subject ) :
 						loop.subject 
 				),
