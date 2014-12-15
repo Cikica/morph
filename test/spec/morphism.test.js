@@ -233,6 +233,24 @@
 			})
 		})
 
+		it("returns the original object if given an object and into object of different sizes", function() {
+			expect( module.biject_object({
+				object : { 
+					s : "some",
+					d : "some other"
+				},
+				into : {
+					c : "another",
+				},
+				with : function ( loop ) {
+					return {}
+				}
+			})).toEqual({ 
+				s : "some",
+				d : "some other"
+			})
+		})
+
 		it("converts returned key back to its original if it has the same value as an existing ", function() {
 
 			expect( module.biject_object({

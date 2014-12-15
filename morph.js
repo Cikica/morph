@@ -149,17 +149,27 @@
 
 		biject_object : function ( biject ) {
 
-			var key, value, self
+			var key, value, self, into_key, into_value
 
-			self  = this
-			key   = this.get_the_keys_of_an_object( biject.object )
-			value = this.get_the_values_of_an_object( biject.object )
+			self       = this
+			key        = this.get_the_keys_of_an_object( biject.object )
+			value      = this.get_the_values_of_an_object( biject.object )
+			into_key   = this.get_the_keys_of_an_object( biject.into ) 
+			into_value = this.get_the_values_of_an_object( biject.into )
+			
+			if ( biject.into !== undefined && into_key.length !== key.length ) {
+				return biject.object
+			}
 
 			return this.base_loop({
-				index   : 0,
-				length  : key.length,
-				subject : key.slice(0),
-				map     : {
+				"index"   : 0,
+				"length"  : key.length,
+				"subject" : key.slice(0),
+				"into"    : { 
+					key   : ( biject.into ? into_key : [] ),
+					value : ( biject.into ? into_value : [] ),
+				},
+				"map" : {
 					"key"   : [],
 					"value" : [],
 				},
@@ -173,7 +183,7 @@
 					})
 				},
 				else_do      : function ( base_loop ) {
-
+					
 					var given, current_key, current_value, given_key_index_in_given_keys, final_key
 
 					current_key   = key[base_loop.index]
@@ -181,7 +191,19 @@
 					given         = biject.with.call({}, {
 						"key"   : current_key,
 						"value" : current_value,
-						"index" : base_loop.index
+						"index" : base_loop.index,
+						"into"  : {
+							"key"   : ( 
+								base_loop.into.key.length > 0 ?
+									base_loop.into.key[base_loop.index] :
+									false
+							),
+							"value" : ( 
+								base_loop.into.value.length > 0 ? 
+									base_loop.into.value[base_loop.index] :
+									false
+							),
+						}
 					})
 					given_key_index_in_given_keys = base_loop.map.key.indexOf( given.key )
 					
@@ -194,11 +216,10 @@
 						console.warn( biject.object )
 						console.warn(".....")
 					}
-
 					return {
-						length : base_loop.length,
-						map    : {
-							key   : base_loop.map.key.concat(( 
+						"length" : base_loop.length,
+						"map"    : {
+							key : base_loop.map.key.concat((
 								!given.key || given_key_index_in_given_keys > -1 ?
 									current_key :
 									given.key
@@ -207,10 +228,11 @@
 								given.value || current_value
 							),
 						},
-						index        : base_loop.index + 1,
-						is_done_when : base_loop.is_done_when,
-						if_done      : base_loop.if_done,
-						else_do      : base_loop.else_do,
+						"index"        : base_loop.index + 1,
+						"is_done_when" : base_loop.is_done_when,
+						"if_done"      : base_loop.if_done,
+						"else_do"      : base_loop.else_do,
+						"into"         : base_loop.into,
 					}
 				}
 			})
