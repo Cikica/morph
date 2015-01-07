@@ -184,7 +184,7 @@
 				},
 				else_do      : function ( base_loop ) {
 					
-					var given, current_key, current_value, given_key_index_in_given_keys, final_key
+					var given, current_key, current_value, given_key_index_in_given_keys, final_value
 
 					current_key   = key[base_loop.index]
 					current_value = value[base_loop.index]
@@ -205,6 +205,12 @@
 							),
 						}
 					})
+
+					final_value                   = ( 
+						given.value === undefined ? 
+							current_value : 
+							given.value 
+					)
 					given_key_index_in_given_keys = base_loop.map.key.indexOf( given.key )
 					
 					if ( given_key_index_in_given_keys > -1 ) {
@@ -216,6 +222,7 @@
 						console.warn( biject.object )
 						console.warn(".....")
 					}
+
 					return {
 						"length" : base_loop.length,
 						"map"    : {
@@ -224,9 +231,11 @@
 									current_key :
 									given.key
 							)),
-							value : base_loop.map.value.concat(
-								given.value || current_value
-							),
+							value : (
+								final_value && final_value.constructor === Array ? 
+									base_loop.map.value.concat( [ final_value ] ): 
+									base_loop.map.value.concat( final_value )
+							)
 						},
 						"index"        : base_loop.index + 1,
 						"is_done_when" : base_loop.is_done_when,
@@ -585,7 +594,7 @@
   				if ( object.hasOwnProperty( property ) ) {
   					var value
   					value = object[property]
-  					if ( value.constructor === Array ) {
+  					if ( value && value.constructor === Array ) {
   						keys = keys.concat([ value ])
   					} else { 
   						keys = keys.concat( value )
