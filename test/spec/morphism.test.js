@@ -116,7 +116,7 @@
 			})).toEqual( [2,4] )
 		})
 
-		it("leftover members of an array which are objects still contain references to the orignal ones #!", function() {
+		it("removes leftover members of an array which are objects but still contain references to the orignal ones #!", function() {
 			
 			var pass, result
 			pass   = {
