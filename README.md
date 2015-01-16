@@ -4,10 +4,75 @@ Morph
 
 ### History & Background
 Il get to witting one these, one these days.
-
 Signed Mr.Slackaslack
 
 ### Methods
+
+(inject array)
+	[#inject array]
+
+(inject object)
+	[#inject object]
+
+(surject array)
+	[#surject array]
+
+(surject object)
+	[#surject object]
+
+(biject object)
+	[#biject object]
+
+(biject array)
+	[#biject array]
+
+(object loop)
+	[#object loop]
+
+(does array contain this value)
+	[#does array contain this value]
+
+(are these two values the same)
+	[#are these two values the same]
+
+(are these two objects the same)
+	[#are these two objects the same]
+
+(are these two arrays the same)
+	[#are these two arrays the same]
+
+(get the keys of an object)
+	[#get the keys of an object]
+
+(get the values of an object)
+	[#get the values of an object]
+
+(get object from array)
+	[#get object from array]
+
+(while greater than zero)
+	[#while greater than zero]
+
+(base loop)
+	[#base loop]
+
+(index loop)
+	[#index loop]
+
+(index loop base)
+	[#index loop base]
+
+(convert node list to array)
+	[#convert node list to array]
+
+(copy)
+	[#copy]
+
+(replace with default)
+	[replace with default]
+
+(flatten object)
+	[flatten object]
 
 #### flatten_object
 
