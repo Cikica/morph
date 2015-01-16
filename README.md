@@ -10,10 +10,10 @@ Signed Mr.Slackaslack
 
 - [inject_array](#inject_array)
 - [surject_array](#surject_array)
+- [biject_array](#biject_array)
 - [inject_object](#inject_object)
 - [surject_object](#surject_object)
 - [biject_object](#biject_object)
-- [biject_array](#biject_array)
 - [object_loop](#object_loop)
 - [does_array_contain_this_value](#does_array_contain_this_value)
 - [are_these_two_values_the_same](#are_these_two_values_the_same)
@@ -88,6 +88,7 @@ surject_array({
 	with  : [],
 	by    : "value" || "index"
 })
+```
 
 **Examples :**
 
