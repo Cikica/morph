@@ -112,6 +112,7 @@
 				else_do      : function ( base_loop ) {
 
 					var value_to_concat
+					
 					if ( biject.with ) { 
 						value_to_concat = biject.with.call({}, {
 							"index"   : base_loop.index,
@@ -120,6 +121,10 @@
 					} else {
 						value_to_concat = base_loop.index
 					}
+
+					value_to_concat = self.copy_value({
+						value : value_to_concat
+					})
 
 					return { 
 						"length"       : base_loop.length,
