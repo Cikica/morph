@@ -104,41 +104,34 @@
 				"into"       : [],
 				"length"     : biject.array.length,
 				is_done_when : function ( base_loop ) {
-					return base_loop.subject.length === base_loop.into
+					return base_loop.length === base_loop.into.length
 				},
 				if_done      : function ( base_loop ) { 
-					console.log( base_loop )
+					return base_loop.into
 				},
 				else_do      : function ( base_loop ) {
-					console.log( base_loop )
+
+					var value_to_concat
+					if ( biject.with ) { 
+						value_to_concat = biject.with.call({}, {
+							"index"   : base_loop.index,
+							"indexed" : base_loop.subject[base_loop.index]
+						})
+					} else {
+						value_to_concat = base_loop.index
+					}
+
+					return { 
+						"length"       : base_loop.length,
+						"subject"      : base_loop.subject,
+						"index"        : base_loop.index + 1,
+						"into"         : base_loop.into.concat( value_to_concat ),
+						"if_done"      : base_loop.if_done,
+						"is_done_when" : base_loop.is_done_when,
+						"else_do"      : base_loop.else_do,
+					}
 				}
 			})
-			// return this.index_loop_base({
-			// 	"subject"  : [],
-			// 	"start_at" : 0,
-			// 	"into"     : [],
-			// 	if_done  : function (base_loop) {
-			// 		return base_loop.into
-			// 	},
-			// 	else_do : function (base_loop) {
-			// 		return {
-			// 			"subject"  : self.copy({
-			// 				what : base_loop.subject 
-			// 			}),
-			// 			"into"     : base_loop.into.concat(
-			// 				biject.with({
-			// 					"index"   : base_loop.start_at,
-			// 					"indexed" : self.copy({
-			// 						what : base_loop.subject[base_loop.start_at]
-			// 					})
-			// 				})
-			// 			),
-			// 			"start_at" : base_loop.start_at + 1,
-			// 			"if_done"  : base_loop.if_done,
-			// 			"else_do"  : base_loop.else_do
-			// 		}
-			// 	}
-			// })
 		},
 
 		inject_object : function ( what ) {
@@ -749,6 +742,39 @@
 				}
 			})
 		},
+
+		// copy_object : function ( copy ) {
+			
+		// 	var key, value
+
+		// 	return this.base_loop({
+		// 		"key"          : this.get_the_keys_of_an_object( copy.object ),
+		// 		"value"        : this.get_the_values_of_an_object( copy.object ),
+		// 		"index"        : 0,
+		// 		"into"         : {},
+		// 		"is_done_when" : function ( loop ) {
+		// 			return loop.index === loop.key.length
+		// 		},
+		// 		"if_done"      : function ( loop ) {
+		// 			return loop.into
+		// 		},
+		// 		"else_do"      : function ( loop ) {
+		// 			var key, value
+		// 			key       = 
+		// 			value     = 
+		// 			loop.into = 
+		// 			return { 
+		// 				"key"          : loop.key,
+		// 				"value"        : loop.value,
+		// 				"index"        : loop.index + 1,
+		// 				"into"         : loop.into,
+		// 				"is_done_when" : loop.is_done_when,
+		// 				"if_done"      : loop.if_done,
+		// 				"else_do"      : loop.else_do,
+		// 			}
+		// 		},
+		// 	})
+		// },
 
 		copy : function (copy) {
 			if ( copy.what.constructor === Array && copy.object_array ) {

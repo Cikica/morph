@@ -1,6 +1,71 @@
 
 	var module = window.morph
 
+	// describe("copy object", function() {
+		
+	// 	var definition
+	// 	definition = { 
+	// 		object : {}
+	// 	}
+
+	// 	it("copies one dimensional string and number object without reference", function() {
+		
+	// 		var result, object
+		
+	// 		object = { 
+	// 			s : 1, 
+	// 			d : "skaduf"
+	// 		}
+	// 		result = module.copy_object({
+	// 			object : object
+	// 		})
+	// 		result.s = 2
+	// 		result.d = "somesome"
+	// 		expect( object ).toEqual({ 
+	// 			s : 1, 
+	// 			d : "skaduf"
+	// 		})
+	// 	})
+
+	// 	// it("copies multi dimensional string and number object without reference", function() {
+			
+	// 	// 	var result, object
+		
+	// 	// 	object = { 
+	// 	// 		s : 1, 
+	// 	// 		d : "skaduf",
+	// 	// 		c : { 
+	// 	// 			b    : "2" ,
+	// 	// 			some : "some",
+	// 	// 			l    : {
+	// 	// 				b : 5
+	// 	// 			}
+	// 	// 		}
+	// 	// 	}
+	// 	// 	result = module.copy_object({
+	// 	// 		object : object
+	// 	// 	})
+
+	// 	// 	result.s   = 5
+	// 	// 	result.d   = 55
+	// 	// 	result.c.b = "some"
+	// 	// 	result.l.b = "3432"
+
+	// 	// 	expect( object ).toEqual({ 
+	// 	// 		s : 1, 
+	// 	// 		d : "skaduf",
+	// 	// 		c : { 
+	// 	// 			b    : "2" ,
+	// 	// 			some : "some",
+	// 	// 			l    : {
+	// 	// 				b : 5
+	// 	// 			}
+	// 	// 		}
+	// 	// 	})
+	// 	// })
+
+	// })
+
 	describe("inject array", function() {
 		
 		var definition, input
@@ -106,6 +171,28 @@
 				}
 			})).toEqual([1,3,5,7,9,11])
 		})
+
+		// it("bijects array of objects with no reference", function() {
+
+		// 	var object_1, object_2, result
+		// 	object_1 = { s : 2, d : 3 }
+		// 	object_2 = { s : 1, d : 4 }
+		// 	result   = module.biject_array({
+		// 		array : [object_1, object_2, 3, 4],
+		// 		with  : function ( loop ) { 
+		// 			return loop.indexed
+		// 		}
+		// 	})
+
+		// 	expect( result ).toEqual([
+		// 		{ s : 2, d : 3 },
+		// 		{ s : 1, d : 4 },
+		// 		3, 4
+		// 	])
+
+		// 	result[0].s = 3
+		// 	expect( object_1.s ).toEqual( 2 )
+		// })
 
 		// it("bijects into another array cleanly", function() {
 		// 	expect(module.biject_array({
