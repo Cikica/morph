@@ -743,38 +743,79 @@
 			})
 		},
 
-		// copy_object : function ( copy ) {
-			
-		// 	var key, value
+		copy_value : function ( copy ) {
 
-		// 	return this.base_loop({
-		// 		"key"          : this.get_the_keys_of_an_object( copy.object ),
-		// 		"value"        : this.get_the_values_of_an_object( copy.object ),
-		// 		"index"        : 0,
-		// 		"into"         : {},
-		// 		"is_done_when" : function ( loop ) {
-		// 			return loop.index === loop.key.length
-		// 		},
-		// 		"if_done"      : function ( loop ) {
-		// 			return loop.into
-		// 		},
-		// 		"else_do"      : function ( loop ) {
-		// 			var key, value
-		// 			key       = 
-		// 			value     = 
-		// 			loop.into = 
-		// 			return { 
-		// 				"key"          : loop.key,
-		// 				"value"        : loop.value,
-		// 				"index"        : loop.index + 1,
-		// 				"into"         : loop.into,
-		// 				"is_done_when" : loop.is_done_when,
-		// 				"if_done"      : loop.if_done,
-		// 				"else_do"      : loop.else_do,
-		// 			}
-		// 		},
-		// 	})
-		// },
+			if (
+				!copy.value                       ||
+				copy.value.constructor === String ||
+				copy.value.constructor === Number
+			) {
+				return copy.value
+			}
+
+			if ( copy.value.constructor === Array ) { 
+				return this.copy_array({
+					array : copy.value
+				})
+			}
+
+			if ( copy.value.constructor === Object ) {
+				return this.copy_object({
+					object : copy.value
+				})
+			}
+		},
+
+		copy_object : function ( copy ) {
+			
+			var key, value, self
+
+			self = this
+
+			return this.base_loop({
+				"key"          : this.get_the_keys_of_an_object( copy.object ),
+				"value"        : this.get_the_values_of_an_object( copy.object ),
+				"index"        : 0,
+				"into"         : {},
+				"is_done_when" : function ( loop ) {
+					return loop.index === loop.key.length
+				},
+				"if_done"      : function ( loop ) {
+					return loop.into
+				},
+				"else_do"      : function ( loop ) {
+					var key, value
+					key            = loop.key[loop.index]
+					value          = self.copy_value({
+						value : loop.value[loop.index]
+					})
+					loop.into[key] = value
+					return { 
+						"key"          : loop.key,
+						"value"        : loop.value,
+						"index"        : loop.index + 1,
+						"into"         : loop.into,
+						"is_done_when" : loop.is_done_when,
+						"if_done"      : loop.if_done,
+						"else_do"      : loop.else_do,
+					}
+				},
+			})
+		},
+
+		copy_array : function ( copy ) {
+			var self = this
+			return this.index_loop({
+				subject : copy.array,
+				else_do : function ( loop ) {
+					return loop.into.concat(
+						self.copy_value({
+							value : loop.indexed
+						})
+					)
+				}
+			})
+		},
 
 		copy : function (copy) {
 			if ( copy.what.constructor === Array && copy.object_array ) {

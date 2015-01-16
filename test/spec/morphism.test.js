@@ -1,70 +1,92 @@
 
 	var module = window.morph
 
-	// describe("copy object", function() {
+	describe("copy value", function() {
 		
-	// 	var definition
-	// 	definition = { 
-	// 		object : {}
-	// 	}
+		var definition
+		definition = { 
+			object : {}
+		}
 
-	// 	it("copies one dimensional string and number object without reference", function() {
+		it("copies one dimensional string and number object without reference", function() {
 		
-	// 		var result, object
+			var result, object
 		
-	// 		object = { 
-	// 			s : 1, 
-	// 			d : "skaduf"
-	// 		}
-	// 		result = module.copy_object({
-	// 			object : object
-	// 		})
-	// 		result.s = 2
-	// 		result.d = "somesome"
-	// 		expect( object ).toEqual({ 
-	// 			s : 1, 
-	// 			d : "skaduf"
-	// 		})
-	// 	})
+			object = { 
+				s : 1, 
+				d : "skaduf"
+			}
+			result = module.copy_value({
+				value : object
+			})
+			result.s = 2
+			result.d = "somesome"
+			expect( object ).toEqual({ 
+				s : 1, 
+				d : "skaduf"
+			})
+		})
 
-	// 	// it("copies multi dimensional string and number object without reference", function() {
+		it("copies multi dimensional string and number object without reference", function() {
 			
-	// 	// 	var result, object
+			var result, object
 		
-	// 	// 	object = { 
-	// 	// 		s : 1, 
-	// 	// 		d : "skaduf",
-	// 	// 		c : { 
-	// 	// 			b    : "2" ,
-	// 	// 			some : "some",
-	// 	// 			l    : {
-	// 	// 				b : 5
-	// 	// 			}
-	// 	// 		}
-	// 	// 	}
-	// 	// 	result = module.copy_object({
-	// 	// 		object : object
-	// 	// 	})
+			object = { 
+				s : 1, 
+				d : "skaduf",
+				c : { 
+					b    : "2" ,
+					some : "some",
+					l    : {
+						b : 5
+					}
+				}
+			}
+			result = module.copy_value({
+				value : object
+			})
+			console.log( result )
+			result.s     = 5
+			result.d     = 55
+			result.c.b   = "some"
+			result.c.l.b = "3432"
 
-	// 	// 	result.s   = 5
-	// 	// 	result.d   = 55
-	// 	// 	result.c.b = "some"
-	// 	// 	result.l.b = "3432"
+			expect( object ).toEqual({ 
+				s : 1, 
+				d : "skaduf",
+				c : { 
+					b    : "2" ,
+					some : "some",
+					l    : {
+						b : 5
+					}
+				}
+			})
+		})
 
-	// 	// 	expect( object ).toEqual({ 
-	// 	// 		s : 1, 
-	// 	// 		d : "skaduf",
-	// 	// 		c : { 
-	// 	// 			b    : "2" ,
-	// 	// 			some : "some",
-	// 	// 			l    : {
-	// 	// 				b : 5
-	// 	// 			}
-	// 	// 		}
-	// 	// 	})
-	// 	// })
+		it("copies an array of objects without reference", function() {
+			var object_1, array, result
+			object_1 = {
+				"some" : "asda",
+				"another" : {
+					"there" : "sda"
+				}
+			}
+			array    = [object_1, 1, 2, 5]
+			result   = module.copy_value({
+				value : array
+			})
+			result[0].some         = "some name here"
+			result[0].another.some = "some some"
+			expect( object_1 ).toEqual({
+				"some" : "asda",
+				"another" : {
+					"there" : "sda"
+				}
+			})
+		})
 
-	// })
+	})
 
 	describe("inject array", function() {
 		
