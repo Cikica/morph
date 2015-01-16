@@ -8,49 +8,31 @@ Signed Mr.Slackaslack
 
 ### Methods
 
-(inject array)[#inject array]
+#### Glossary
 
-(inject object)[#inject object]
+[inject_array](#inject array)
+[inject_object](#inject object)
+[surject_array](#surject array)
+[surject_object](#surject object)
+[biject_object](#biject object)
+[biject_array](#biject array)
+[object_loop](#object loop)
+[does_array_contain_this_value](#does array contain this value)
+[are_these_two_values_the_same](#are these two values the same)
+[are_these_two_objects_the_same](#are these two objects the same)
+[are_these_two_arrays_the_same](#are these two arrays the same)
+[get_the_keys_of_an_object](#get the keys of an object)
+[get_the_values_of_an_object](#get the values of an object)
+[get_object_from_array](#get object from array)
+[while_greater_than_zero](#while greater than zero)
+[base_loop](#base loop)
+[index_loop](#index loop)
+[index_loop_base](#index loop base)
+[convert_node_list_to_array](#convert node list to array)
+[copy](#copy)
+[replace_with_default](#replace with default)
+[flatten_object](#flatten object)
 
-(surject array)[#surject array]
-
-(surject object)[#surject object]
-
-(biject object)[#biject object]
-
-(biject array)[#biject array]
-
-(object loop)[#object loop]
-
-(does array contain this value)[#does array contain this value]
-
-(are these two values the same)[#are these two values the same]
-
-(are these two objects the same)[#are these two objects the same]
-
-(are these two arrays the same)[#are these two arrays the same]
-
-(get the keys of an object)[#get the keys of an object]
-
-(get the values of an object)[#get the values of an object]
-
-(get object from array)[#get object from array]
-
-(while greater than zero)[#while greater than zero]
-
-(base loop)[#base loop]
-
-(index loop)[#index loop]
-
-(index loop base)[#index loop base]
-
-(convert node list to array)[#convert node list to array]
-
-(copy)[#copy]
-
-(replace with default)[replace with default]
-
-(flatten object)[flatten object]
 
 #### flatten_object
 
