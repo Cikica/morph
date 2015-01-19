@@ -1,10 +1,11 @@
 Morph
 =====
-*stateless utility*
+
+**Stateless Utility**
 
 ### History & Background
-Il get to witting one these, one these days.
-Signed Mr.Slackaslack
+The purpose of morph is to provide a functional way to handle day to day tasks of programing such as 
+iterating, comparing, removing and adding. All of this whilst being stateless.
 
 ### Methods
 
