@@ -47,6 +47,8 @@
 
 		surject_array : function ( what ) {
 
+			var self = this
+
 			return this.index_loop_base({
 				subject         : what.array,
 				start_at        : 0,
@@ -64,25 +66,61 @@
 				},
 				else_do  : function ( loop ) {
 
-					var index_of_value
-					index_of_value = ( what.by === "index" ? loop.start_at : loop.subject[loop.start_at] )
+					var index_of_current_value, extracted_array, leftover_array, 
+					current_value, extract_value
+
+					current_value          = self.copy_value({
+						value : loop.subject[loop.start_at]
+					})
+					index_or_current_value = (
+						what.by === "index" ?
+							loop.start_at :
+							current_value
+					)
+					if ( what.by === "index" ) {
+						extract_value = what.with.indexOf( index_or_current_value ) > -1
+					} else { 
+						extract_value = self.index_loop({
+							"subject" : what.with,
+							"into"    : false,
+							"else_do" : function ( what_with_loop ) {
+
+								if ( what_with_loop.into === false ) { 
+									return self.are_these_two_values_the_same({
+										first  : what_with_loop.indexed,
+										second : current_value
+									})
+								}
+
+								return what_with_loop.into
+							}
+						})
+					}
+
+					extracted_array = (
+						extract_value === true ? 
+							loop.into.extracted.concat( current_value ) :
+							self.copy_value({
+								value : loop.into.extracted
+							})
+					)
+					leftover_array  = ( 
+						extract_value === false?
+							loop.into.leftover.concat( current_value ) :
+							self.copy_value({
+								value : loop.into.leftover
+							})
+					)
+
 					return {
-						subject         : loop.subject,
-						start_at        : loop.start_at + 1,
-						into            : { 
-							extracted : ( 
-								what.with.indexOf( index_of_value ) > -1 ? 
-									loop.into.extracted.concat(loop.subject[loop.start_at]) :
-									loop.into.extracted.slice(0)
-							),
-							leftover  : ( 
-								what.with.indexOf( index_of_value ) < 0 ?
-									loop.into.leftover.concat(loop.subject[loop.start_at]) :
-									loop.into.leftover.slice(0)	
-							)
+						subject  : loop.subject,
+						start_at : loop.start_at + 1,
+						into     : {
+							extracted : extracted_array,
+							leftover  : leftover_array,
 						},
-						if_done  : loop.if_done,
-						else_do  : loop.else_do
+						if_done : loop.if_done,
+						else_do : loop.else_do
 					}
 				},
 			})
