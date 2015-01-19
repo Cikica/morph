@@ -1,40 +1,35 @@
-Morph
-=====
+# Morph
 
 **Stateless Utility**
 
-### History & Background
 The purpose of morph is to provide a functional way to handle day to day tasks of programing such as 
 iterating, comparing, removing and adding. All of this whilst being stateless.
 
 ### Methods
 
-- Array
-	- [inject_array](#inject_array)
-	- [surject_array](#surject_array)
-	- [biject_array](#biject_array)
-	- [index_loop](#index_loop)
-- Object
-	- [inject_object](#inject_object)
-	- [surject_object](#surject_object)
-	- [biject_object](#biject_object)
-	- [flatten_object](#flatten_object)
-	- [object_loop](#object_loop)
-- Misc
-	- [does_array_contain_this_value](#does_array_contain_this_value)
-	- [are_these_two_values_the_same](#are_these_two_values_the_same)
-	- [are_these_two_objects_the_same](#are_these_two_objects_the_same)
-	- [are_these_two_arrays_the_same](#are_these_two_arrays_the_same)
-	- [get_the_keys_of_an_object](#get_the_keys_of_an_object)
-	- [get_the_values_of_an_object](#get_the_values_of_an_object)
-	- [get_object_from_array](#get_object_from_array)
-	- [while_greater_than_zero](#while_greater_than_zero)
-	- [base_loop](#base_loop)
-	- [index_loop_base](#index_loop_base)
-	- [convert_node_list_to_array](#convert_node_list_to_array)
-	- [copy_value](#copy_value)
-	- [copy](#copy)
-	- [replace_with_default](#replace_with_default)
+- [inject_array](#inject_array)
+- [surject_array](#surject_array)
+- [biject_array](#biject_array)
+- [index_loop](#index_loop)
+- [inject_object](#inject_object)
+- [surject_object](#surject_object)
+- [biject_object](#biject_object)
+- [flatten_object](#flatten_object)
+- [object_loop](#object_loop)
+- [does_array_contain_this_value](#does_array_contain_this_value)
+- [are_these_two_values_the_same](#are_these_two_values_the_same)
+- [are_these_two_objects_the_same](#are_these_two_objects_the_same)
+- [are_these_two_arrays_the_same](#are_these_two_arrays_the_same)
+- [get_the_keys_of_an_object](#get_the_keys_of_an_object)
+- [get_the_values_of_an_object](#get_the_values_of_an_object)
+- [get_object_from_array](#get_object_from_array)
+- [while_greater_than_zero](#while_greater_than_zero)
+- [base_loop](#base_loop)
+- [index_loop_base](#index_loop_base)
+- [convert_node_list_to_array](#convert_node_list_to_array)
+- [copy_value](#copy_value)
+- [copy](#copy)
+- [replace_with_default](#replace_with_default)
 	
 
 ### inject_array
