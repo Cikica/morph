@@ -700,7 +700,7 @@
 			}
 		},
 
-		index_loop : function (loop) {
+		index_loop : function ( loop ) {
 
 			var self = this
 
@@ -715,15 +715,15 @@
 				if_done  : loop.if_done  || function (base_loop) {
 					return base_loop.into
 				},
-				else_do : function (base_loop) {
+				else_do : function ( base_loop ) {
 					return {
-						subject  : self.copy({ what : base_loop.subject }),
+						subject  : base_loop.subject,
 						into     : loop.else_do({
-							subject : self.copy({ what : base_loop.subject }),
+							subject : base_loop.subject,
 							index   : base_loop.start_at,
 							into    : base_loop.into,
-							indexed : self.copy({
-								what : base_loop.subject[base_loop.start_at]
+							indexed : self.copy_value({
+								value : base_loop.subject[base_loop.start_at]
 							})
 						}),
 						start_at : base_loop.start_at + 1,
@@ -788,14 +788,6 @@
 
 		copy_value : function ( copy ) {
 
-			if (
-				!copy.value                       ||
-				copy.value.constructor === String ||
-				copy.value.constructor === Number
-			) {
-				return copy.value
-			}
-
 			if ( copy.value.constructor === Array ) { 
 				return this.copy_array({
 					array : copy.value
@@ -807,6 +799,8 @@
 					object : copy.value
 				})
 			}
+
+			return copy.value
 		},
 
 		copy_object : function ( copy ) {

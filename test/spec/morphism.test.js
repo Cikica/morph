@@ -366,6 +366,7 @@
 	})
 	
 	describe("index loop", function () {
+		
 		var input_1, input_2, input_3
 		input_1 = {
 			subject   : [1,2,3],
