@@ -199,9 +199,7 @@ surject_object({
 })
 ```
 
-### biject_object
-
-One to one maping of an object.
+**Examples**
 
 ```javascript
 surject_object({
