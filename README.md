@@ -224,3 +224,80 @@ surject_object({
 })
 // => { "another" : "value" }
 ```
+
+### biject_object
+
+One to one maping of an object.
+
+```javascript
+surject_object({
+	object : {},
+	with   : function ( loop ) {
+		// console.log( loop ) =>
+		// {
+		// 	index : Number,
+		// 	into  : { 
+		// 		key   : Boolean || Array,
+		// 		value : Boolean || Array
+		// 	},
+		// 	key   : Value,
+		// 	value : Value
+		// }
+	}
+})
+```
+
+**Examples**
+
+```javascript
+biject_object({
+	object : {
+		"some"    : "here",
+		"another" : "over there",
+	},
+	with   : function ( loop ) {
+		return { 
+			key   : loop.key   +"some",
+			value : loop.value +"some",
+		}
+	}
+})
+// => {
+// 	"somesome"    : "heresome",
+// 	"anothersome" : "over theresome",
+// }
+
+biject_object({
+	object : {
+		"some"    : "here",
+		"another" : "over there",
+	},
+	with   : function ( loop ) {
+		return { 
+			value : loop.value +"some",
+		}
+	}
+})
+
+// => {
+// 	"some"    : "heresome",
+// 	"another" : "over theresome",
+// }
+
+biject_object({
+	object : {
+		"some"    : "here",
+		"another" : "over there",
+	},
+	with   : function ( loop ) {
+		return { 
+			key : loop.key + "some"
+		}
+	}
+})
+
+// => {
+// 	"somesome"    : "here",
+// 	"anothersome" : "over there",
+// }
+```
