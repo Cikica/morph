@@ -10,29 +10,43 @@ iterating, comparing, removing and adding. All of this whilst being stateless.
 ### Glossary
 
 [inject_array](#inject_array)
+
 [surject_array](#surject_array)
+
 [biject_array](#biject_array)
+
 [inject_object](#inject_object)
+
 [surject_object](#surject_object)
+
 [biject_object](#biject_object)
 
 [index_loop](#index_loop)
+
 [copy_value](#copy_value)
+
 [are_these_two_values_the_same](#are_these_two_values_the_same)
+
 [does_array_contain_this_value](#does_array_contain_this_value)
 
-
 [flatten_object](#flatten_object)
+
 [object_loop](#object_loop)
 
 [create_object_from_key_and_value_array](#create_object_from_key_and_value_array)
+
 [get_the_keys_of_an_object](#get_the_keys_of_an_object)
+
 [get_the_values_of_an_object](#get_the_values_of_an_object)
 
 [while_greater_than_zero](#while_greater_than_zero)
+
 [base_loop](#base_loop)
+
 [index_loop_base](#index_loop_base)
+
 [convert_node_list_to_array](#convert_node_list_to_array)
+
 [replace_with_default](#replace_with_default)
 
 ### Syntax Definition Guide
