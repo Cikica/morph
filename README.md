@@ -50,6 +50,18 @@ iterating, comparing, removing and adding. All of this whilst being stateless.
 [replace_with_default](#replace_with_default)
 
 ### Syntax Definition Guide
+
+Through out the docs you will come across syntax definitions for every method. Here is a guide to
+what each peculiarity means, though some may be obvious.
+
+`Array`    : Can be array
+`Object`   : Can be object
+`Number`   : Can be number
+`String`   : Can be string
+`Infinity` : Can be any type of value
+`||`       : Can be the type to the left but will default to whatever is at the left if nothing is given.
+`&&`       : Can be the type to the left and the type to the right
+`=>`       : The resulst is this
 	
 
 ### inject_array
@@ -58,8 +70,8 @@ Insert members into an array and return result.
 
 ```javascript
 inject_array({
-	array : [],
-	with  : [] || {} || function ( member ) {}
+	array : Array,
+	with  : Array && Object && function ( member ) {}
 })
 ```
 
@@ -105,9 +117,9 @@ Remove members of an array and return leftovers.
 
 ```javascript
 surject_array({
-	array : [],
-	with  : [],
-	by    : "value" || "index"
+	array : Array,
+	with  : Array,
+	by    : "value" && "index"
 })
 ```
 
@@ -140,7 +152,7 @@ One to one map of array.
 
 ```javascript
 biject_array({
-	array : [],
+	array : Array,
 	with  : function ( loop ) {
 		// loop =>
 		// {
@@ -168,8 +180,8 @@ Insert members into object and return result.
 
 ```javascript
 inject_object({
-	object : {},
-	with   : {} || []
+	object : Object,
+	with   : Object && Array
 })
 ```
 
@@ -213,9 +225,9 @@ Remove members of an object and return result.
 
 ```javascript
 surject_object({
-	object : {},
-	with   : {} || []
-	by     : "value" || "key"
+	object : Object,
+	with   : Object && Array
+	by     : "value" && "key"
 })
 ```
 
@@ -251,14 +263,14 @@ One to one maping of an object.
 
 ```javascript
 surject_object({
-	object : {},
+	object : Object,
 	with   : function ( loop ) {
-		// console.log( loop ) =>
+		// loop =>
 		// {
 		// 	index : Number,
 		// 	into  : { 
-		// 		key   : Boolean || Array,
-		// 		value : Boolean || Array
+		// 		key   : Boolean && Array,
+		// 		value : Boolean && Array
 		// 	},
 		// 	key   : Value,
 		// 	value : Value
@@ -332,7 +344,7 @@ index_loop({
 	subject  : Array,
 	into     : Infinity || Array,
 	if_done  : function ( loop ) {
-		// console.log( loop ) =>
+		// loop =>
 		// {
 		//	subject : Array,
 		//  index   : Number,
