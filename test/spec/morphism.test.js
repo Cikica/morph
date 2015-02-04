@@ -569,39 +569,94 @@
 	
 	describe("index loop", function () {
 		
-		var input_1, input_2, input_3
-		input_1 = {
-			subject   : [1,2,3],
-			else_do : function (loop) {
-				return loop.into.concat("member "+ loop.subject[loop.index])
-			}
-		},
-		input_2 = {
-			subject   : [1,2,3],
-			else_do : function (loop) {
-				return loop.into.concat("member "+ loop.subject[loop.index])
-			}
-		},
-		input_3 = {
-			subject   : [{ s : 1 }, { s : 2 }],
-			else_do : function (loop) {
-				loop.indexed.s = "change"
-				return loop.into.concat(loop.indexed)
-			}
-		}
+		it("retuns an object result when asked", function() {
+			expect(module.index_loop({
+				subject : [ 1, 2, 3, 4 ],
+				into    : {},
+				else_do : function ( loop ) {
+					loop.into["yolo"+loop.index] = "smolo"+loop.indexed
+					return loop.into
+				}
+			})).toEqual({
+				"yolo0" : "smolo1",
+				"yolo1" : "smolo2",
+				"yolo2" : "smolo3",
+				"yolo3" : "smolo4",
+			})
+		})
+
+		it("it works with if done", function() {
+			expect(module.index_loop({
+				subject : [ 
+					"some", 
+					"somehere", 
+					"here bla", 
+					"some" 
+				],
+				if_done : function ( loop ) {
+					return loop.into.length
+				},
+				else_do : function ( loop ) {
+					if ( loop.indexed === "some" ) { 
+						return loop.into.concat( loop.indexed )
+					}
+					return loop.into
+				}
+			})).toEqual( 2 )
+		})
+
+		it("does boolean returns", function() {
+			expect(module.index_loop({
+				subject : [ 1, 2, 3 ],
+				into    : false,
+				else_do : function ( loop ) { 
+					if ( loop.indexed % 2 ) { 
+						return true
+					}
+					return loop.into
+				}
+			})).toEqual(true)
+		})
 
 		it("returns expected results", function () {
-			expect(module.index_loop(input_1)).toEqual(["member 1", "member 2", "member 3"])
+			expect(module.index_loop({
+				subject   : [ 1, 2, 3 ],
+				else_do : function (loop) {
+					return loop.into.concat( "index " + loop.index + ", value "+ loop.indexed)
+				}
+			})).toEqual([
+				"index 0, value 1", 
+				"index 1, value 2", 
+				"index 2, value 3"
+			])
 		})
 
 		it("has no reference upon completion to the input subject", function () {
-			var output = module.index_loop(input_2)
+			var output, input_2
+			input_2 = {
+				subject   : [1,2,3],
+				else_do : function (loop) {
+					return loop.into.concat("member "+ loop.indexed)
+				}
+			}
+			output  = module.index_loop(input_2)
 			input_2.subject.push("stuff")
 			expect(output.indexOf("stuff")).toEqual(-1)
 		})
 
 		it("result has no reference to objects that were contianed in the input subject", function () {
-			var output = module.index_loop(input_3)
+			var input_3, output
+			input_3 = {
+				subject   : [
+					{ s : 1 },
+					{ s : 2 }
+				],
+				else_do : function (loop) {
+					loop.indexed.s = "change"
+					return loop.into.concat(loop.indexed)
+				}
+			}
+			output  = module.index_loop(input_3)
 			expect(input_3.subject[0].s).toEqual(1)
 			expect(output[0].s).toEqual("change")
 		})
@@ -688,6 +743,7 @@
 		})
 
 	})
+
 
 	describe("base loop", function() {
 		it("loops basic stuff", function() {

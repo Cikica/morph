@@ -5,31 +5,37 @@
 The purpose of morph is to provide a functional way to handle day to day tasks of programing such as 
 iterating, comparing, removing and adding. All of this whilst being stateless.
 
-### Methods
+## Methods
 
-- [inject_array](#inject_array)
-- [surject_array](#surject_array)
-- [biject_array](#biject_array)
-- [inject_object](#inject_object)
-- [surject_object](#surject_object)
-- [biject_object](#biject_object)
-- [index_loop](#index_loop)
-- [flatten_object](#flatten_object)
-- [object_loop](#object_loop)
-- [does_array_contain_this_value](#does_array_contain_this_value)
-- [are_these_two_values_the_same](#are_these_two_values_the_same)
-- [are_these_two_objects_the_same](#are_these_two_objects_the_same)
-- [are_these_two_arrays_the_same](#are_these_two_arrays_the_same)
-- [get_the_keys_of_an_object](#get_the_keys_of_an_object)
-- [get_the_values_of_an_object](#get_the_values_of_an_object)
-- [get_object_from_array](#get_object_from_array)
-- [while_greater_than_zero](#while_greater_than_zero)
-- [base_loop](#base_loop)
-- [index_loop_base](#index_loop_base)
-- [convert_node_list_to_array](#convert_node_list_to_array)
-- [copy_value](#copy_value)
-- [copy](#copy)
-- [replace_with_default](#replace_with_default)
+### Glossary
+
+[inject_array](#inject_array)
+[surject_array](#surject_array)
+[biject_array](#biject_array)
+[inject_object](#inject_object)
+[surject_object](#surject_object)
+[biject_object](#biject_object)
+
+[index_loop](#index_loop)
+[copy_value](#copy_value)
+[are_these_two_values_the_same](#are_these_two_values_the_same)
+[does_array_contain_this_value](#does_array_contain_this_value)
+
+
+[flatten_object](#flatten_object)
+[object_loop](#object_loop)
+
+[create_object_from_key_and_value_array](#create_object_from_key_and_value_array)
+[get_the_keys_of_an_object](#get_the_keys_of_an_object)
+[get_the_values_of_an_object](#get_the_values_of_an_object)
+
+[while_greater_than_zero](#while_greater_than_zero)
+[base_loop](#base_loop)
+[index_loop_base](#index_loop_base)
+[convert_node_list_to_array](#convert_node_list_to_array)
+[replace_with_default](#replace_with_default)
+
+### Syntax Definition Guide
 	
 
 ### inject_array
@@ -300,4 +306,92 @@ biject_object({
 // 	"somesome"    : "here",
 // 	"anothersome" : "over there",
 // }
+```
+
+### index_loop
+
+A robust method for iterating arrays or numbers, when all else is not enough use index loop.
+
+**Syntax**
+```javascript
+index_loop({
+	subject  : Array,
+	into     : Infinity || Array,
+	if_done  : function ( loop ) {
+		// console.log( loop ) =>
+		// {
+		//	subject : Array,
+		//  index   : Number,
+		//  into    : Infinity,
+		//  indexed : Infinity,
+		// }
+		return loop.into
+	} || Function,
+	else_do  : function ( loop ) {
+		return loop.into
+	}
+})
+```
+
+**Examples**
+```javascript
+index_loop({
+	subject   : [ 1, 2, 3 ],
+	else_do : function (loop) {
+		return loop.into.concat( "index " + loop.index + ", value "+ loop.indexed)
+	}
+})
+// =>
+// [
+// 	"index 0, value 1", 
+// 	"index 1, value 2", 
+// 	"index 2, value 3"
+// ]
+
+index_loop({
+	subject : [ 1, 2, 3, 4 ],
+	into    : {},
+	else_do : function ( loop ) {
+		loop.into["yolo"+loop.index] = "smolo"+loop.indexed
+		return loop.into
+	}
+})
+// =>
+// {
+// 	"yolo0" : "smolo1",
+// 	"yolo1" : "smolo2",
+// 	"yolo2" : "smolo3",
+// 	"yolo3" : "smolo4",
+// }
+
+index_loop({
+	subject : [ 1, 2, 3 ],
+	into    : false,
+	else_do : function ( loop ) { 
+		if ( loop.indexed % 2 ) { 
+			return true
+		}
+		return loop.into
+	}
+})
+// => true
+
+module.index_loop({
+	subject : [ 
+		"some", 
+		"somehere", 
+		"here bla", 
+		"some" 
+	],
+	if_done : function ( loop ) {
+		return loop.into.length
+	},
+	else_do : function ( loop ) {
+		if ( loop.indexed === "some" ) { 
+			return loop.into.concat( loop.indexed )
+		}
+		return loop.into
+	}
+})
+// => 2
 ```
