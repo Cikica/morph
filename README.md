@@ -29,10 +29,6 @@ iterating, comparing, removing and adding. All of this whilst being stateless.
 
 [does_array_contain_this_value](#does_array_contain_this_value)
 
-[flatten_object](#flatten_object)
-
-[object_loop](#object_loop)
-
 [create_object_from_key_and_value_array](#create_object_from_key_and_value_array)
 
 [get_the_keys_of_an_object](#get_the_keys_of_an_object)
@@ -41,13 +37,7 @@ iterating, comparing, removing and adding. All of this whilst being stateless.
 
 [while_greater_than_zero](#while_greater_than_zero)
 
-[base_loop](#base_loop)
-
-[index_loop_base](#index_loop_base)
-
 [convert_node_list_to_array](#convert_node_list_to_array)
-
-[replace_with_default](#replace_with_default)
 
 ### Syntax Definition Guide
 
@@ -408,7 +398,7 @@ index_loop({
 })
 // => true
 
-module.index_loop({
+index_loop({
 	subject : [ 
 		"some", 
 		"somehere", 
@@ -426,4 +416,28 @@ module.index_loop({
 	}
 })
 // => 2
+```
+
+### copy_value
+
+Creates a copy of the given value, useful for copying objects, arrays, arrays of objects without 
+reference.
+
+**Syntax**
+```javascript
+copy_value({
+	value : Infinity
+})
+```
+
+### are_these_two_values_the_same
+
+Compare if two values are the same, useful for nested objects, arrays of objects, and so forth.
+
+**Syntax**
+```javascript
+are_these_two_values_the_same({
+	first  : Infinity,
+	second : Infinity
+})
 ```
