@@ -55,14 +55,20 @@ Through out the docs you will come across syntax definitions for every method. H
 what each peculiarity means, though some may be obvious.
 
 `Array`    : Can be array
+
 `Object`   : Can be object
+
 `Number`   : Can be number
+
 `String`   : Can be string
+
 `Infinity` : Can be any type of value
+
 `||`       : Can be the type to the left but will default to whatever is at the left if nothing is given.
+
 `&&`       : Can be the type to the left and the type to the right
-`=>`       : The resulst is this
-	
+
+`=>`       : The resulst is this	
 
 ### inject_array
 
