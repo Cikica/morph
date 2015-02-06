@@ -64,14 +64,14 @@ what each peculiarity means, though some may be obvious.
 
 ### inject_array
 
-Insert members into an array and return result.
-
 ```javascript
 inject_array({
 	array : Array,
 	with  : Array && Object && function ( member ) {}
 })
 ```
+
+Insert members into an array and return result.
 
 **Examples :**
 
@@ -111,8 +111,6 @@ inject_array({
 
 ### surject_array
 
-Remove members of an array and return leftovers.
-
 ```javascript
 surject_array({
 	array : Array,
@@ -120,6 +118,8 @@ surject_array({
 	by    : "value" && "index"
 })
 ```
+
+Remove members of an array and return leftovers.
 
 **Examples :**
 
@@ -146,8 +146,6 @@ surject_array({
 
 ### biject_array
 
-One to one map of array.
-
 ```javascript
 biject_array({
 	array : Array,
@@ -160,6 +158,9 @@ biject_array({
 	}
 })
 ```
+
+One to one map of array.
+
 **Examples :**
 
 ```javascript
@@ -174,14 +175,14 @@ biject_array({
 
 ### inject_object
 
-Insert members into object and return result.
-
 ```javascript
 inject_object({
 	object : Object,
 	with   : Object && Array
 })
 ```
+
+Insert members into object and return result.
 
 **Examples :**
 
@@ -257,8 +258,6 @@ surject_object({
 
 ### biject_object
 
-One to one maping of an object.
-
 ```javascript
 surject_object({
 	object : Object,
@@ -276,6 +275,8 @@ surject_object({
 	}
 })
 ```
+
+One to one maping of an object.
 
 **Examples**
 
@@ -334,9 +335,6 @@ biject_object({
 
 ### index_loop
 
-A robust method for iterating arrays or numbers, when all else is not enough use index loop.
-
-**Syntax**
 ```javascript
 index_loop({
 	subject  : Array,
@@ -356,6 +354,8 @@ index_loop({
 	}
 })
 ```
+
+A robust method for iterating arrays or numbers, when all else is not enough use index loop.
 
 **Examples**
 ```javascript
