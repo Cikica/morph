@@ -422,33 +422,27 @@ index_loop({
 
 ### copy_value
 
-Creates a copy of the given value, useful for copying objects, arrays, arrays of objects without 
-reference.
-
-**Syntax**
 ```javascript
 copy_value({
 	value : Infinity
 })
 ```
 
+Creates a copy of the given value, useful for copying objects, arrays, arrays of objects without 
+reference.
+
 ### are_these_two_values_the_same
 
-Compare if two values are the same, useful for nested objects, arrays of objects, and so forth.
-
-**Syntax**
 ```javascript
 are_these_two_values_the_same({
 	first  : Infinity,
 	second : Infinity
 })
 ```
+Compare if two values are the same, useful for nested objects, arrays of objects, and so forth.
 
 ### merge_two_objects
 
-Merge two objects. The ```object``` replaces duplicate keys of the ```onto```
-
-**Syntax**
 ```javascript
 merge_two_objects({
 	object : Object,
@@ -456,6 +450,8 @@ merge_two_objects({
 })
 // => Object
 ```
+
+Merge two objects. The ```object``` replaces duplicate keys of the ```onto```
 
 **Examples**
 ```javascript
