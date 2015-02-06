@@ -397,7 +397,7 @@
 						key   : base_loop.map.key,
 						value : base_loop.map.value
 					})
-					console.log( base_loop.map.into )
+
 					if ( loop["if_done?"] ) { 
 						result = loop["if_done?"].call({}, { 
 							key    : base_loop.map.key.slice(0),
@@ -816,6 +816,10 @@
 
 		copy_value : function ( copy ) {
 
+			if ( !copy.value ) { 
+				return copy.value
+			}
+
 			if ( copy.value.constructor === Array ) { 
 				return this.copy_array({
 					array : copy.value
@@ -943,6 +947,34 @@
 					}
 
 					return {
+						into : loop.into
+					}
+				}
+			})
+		},
+
+		merge_two_objects : function ( what ) {
+
+			var self = this
+
+			return this.object_loop({
+				subject    : what.object,
+				"into?"    : what.onto,
+				else_do : function ( loop ) {
+
+					if ( 
+						loop.into.hasOwnProperty( loop.key ) &&
+						loop.value.constructor === Object
+					) {
+						loop.into[loop.key] = self.merge_two_objects({
+							object : loop.value,
+							onto   : loop.into[loop.key]
+						})
+					} else { 
+						loop.into[loop.key] = loop.value
+					}
+
+					return { 
 						into : loop.into
 					}
 				}

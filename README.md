@@ -25,6 +25,8 @@ iterating, comparing, removing and adding. All of this whilst being stateless.
 
 [copy_value](#copy_value)
 
+[merge_two_objects](#merge_two_objects)
+
 [are_these_two_values_the_same](#are_these_two_values_the_same)
 
 [does_array_contain_this_value](#does_array_contain_this_value)
@@ -440,4 +442,62 @@ are_these_two_values_the_same({
 	first  : Infinity,
 	second : Infinity
 })
+```
+
+### merge_two_objects
+
+Merge two objects. The ```object``` replaces duplicate keys of the ```onto```
+
+**Syntax**
+```javascript
+merge_two_objects({
+	object : Object,
+	onto   : Object
+})
+// => Object
+```
+
+**Examples**
+```javascript
+merge_two_objects({
+	onto : {
+		"s1" : "should be overwriten",
+		"s2" : "this one is new",
+		"s5" : "original"
+	},
+	object   : {
+		"s1" : "this one overwrites",
+		"s3" : "some new stuff",
+	}
+})
+// => {
+// 	"s1" : "this one overwrites",
+// 	"s2" : "this one is new",
+// 	"s3" : "some new stuff",
+// 	"s5" : "original"
+// }
+
+merge_two_objects({
+	onto : {
+		"s4" : {
+			"s3" : "originale",
+			"s2" : "shoudl be overwriten",
+			"s4" : "originale 2",
+		}
+	},
+	object   : {
+		"s4" : {
+			"s1" : "this one is new",
+			"s2" : "overwrites"
+		}
+	}
+})
+// => {
+// 	"s4" : { 
+// 		"s1" : "this one is new",
+// 		"s2" : "overwrites",
+// 		"s3" : "originale",
+// 		"s4" : "originale 2"
+// 	}
+// }
 ```

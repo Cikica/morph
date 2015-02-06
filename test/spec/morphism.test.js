@@ -147,47 +147,6 @@
 
 	describe("inject object", function () {
 
-		// it("acts a nested object merger", function() {
-		// 	expect(module.inject_object({
-		// 		object : { 
-		// 			c : "some",
-		// 			d : { 
-		// 				a  : "some",
-		// 				bb : [1,2,3],
-		// 				m  : { 
-		// 					a : "2"
-		// 				}
-		// 			}
-		// 		},
-		// 		with : { 
-		// 			c : "some1",
-		// 			l : {
-		// 				c : [1,2,3]
-		// 			},
-		// 			d : {
-		// 				a  : "some2",
-		// 				b  : "some3",
-		// 				bb : [1,2,34],
-		// 				c  : [12,34]
-		// 			}
-		// 		},
-		// 	})).toEqual({
-		// 		c : "some1",
-		// 		l : {
-		// 			c : [1,2,3]
-		// 		},
-		// 		d : { 
-		// 			a  : "some2",
-		// 			b  : "some3",
-		// 			bb : [1,2,34],
-		// 			c  : [12,34],
-		// 			m  : {
-		// 				a : "1"
-		// 			}
-		// 		}
-		// 	})
-		// })
-
 		it("replaces the propertyies of the object with the other object given if there are duplicates", function() {
 			expect(module.inject_object({
 				object : {
@@ -1060,6 +1019,26 @@
 			object : {}
 		}
 
+		it("copies with undefined value", function() {
+			expect(module.copy_value({
+				value : { 
+					"some"  : undefined,
+					"other" : "value here",
+					"deep"  : {
+						"here" :undefined,
+						"somewhere" : [ 1, 2, 3, 4, undefined ]
+					}
+				}
+			})).toEqual({
+				"some"  : undefined,
+				"other" : "value here",
+				"deep"  : {
+					"here" :undefined,
+					"somewhere" : [ 1, 2, 3, 4, undefined ]
+				}
+			})
+		})
+
 		it("copies one dimensional string and number object without reference", function() {
 		
 			var result, object
@@ -1138,4 +1117,50 @@
 			})
 		})
 
+	})
+
+	describe("merge object", function() {
+		it("merges two one dimensional objects ", function() {
+			expect(module.merge_two_objects({
+				onto : {
+					"s1" : "should be overwriten",
+					"s2" : "this one is new",
+					"s5" : "original"
+				},
+				object   : {
+					"s1" : "this one overwrites",
+					"s3" : "some new stuff",
+				}
+			})).toEqual({
+				"s1" : "this one overwrites",
+				"s2" : "this one is new",
+				"s3" : "some new stuff",
+				"s5" : "original"
+			})	
+		})
+
+		it("merges two nested objects", function() {
+			expect(module.merge_two_objects({
+				onto : {
+					"s4" : {
+						"s3" : "originale",
+						"s2" : "shoudl be overwriten",
+						"s4" : "originale 2",
+					}
+				},
+				object   : {
+					"s4" : {
+						"s1" : "this one is new",
+						"s2" : "overwrites"
+					}
+				}
+			})).toEqual({
+				"s4" : { 
+					"s1" : "this one is new",
+					"s2" : "overwrites",
+					"s3" : "originale",
+					"s4" : "originale 2"
+				}
+			})
+		})
 	})
